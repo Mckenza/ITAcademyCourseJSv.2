@@ -1,0 +1,67 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+input[type="text"]{
+    border: 1px solid black;
+}
+
+main{
+    height: 150px;
+    width: 700px;
+    display: flex;
+    flex-direction: row;
+}
+
+.input_information{
+    height: 100%;
+    width: 40%;
+}
+
+.wrap_input{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.wrap_input > *{
+    height: 20%;
+    width: 70%;
+    margin: 5px auto;
+}
+
+.get_information{
+    height: 100%;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.get_information *{
+    height: 20%;
+    width: 70%;
+    margin: 5px auto;
+}
+
+.manage_buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.manage_buttons *{
+    height: 100%;
+    width: 48%;
+}
+
+.fullInfo{
+    height: 100%;
+    width: 20%;
+}
+
+input.borderred{
+    border: 1px red solid;
+}
