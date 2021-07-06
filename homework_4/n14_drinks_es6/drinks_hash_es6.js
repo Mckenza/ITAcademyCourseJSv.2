@@ -1,31 +1,36 @@
-function HashStorageFunc(){
-    const data = {};
+const data = {};
+
+class HashStorageClass{
     
-    this.addValue = function(key, value){
+    constructor(data){
+        this.data = data;
+    }
+    
+    addValue(key, value){
         if(typeof key === 'string' || !value){
-            data[key] = value;
+            this.data[key] = value;
         }
     }
 
-    this.getValue = function(key){
-        if(!data[key]){
+    getValue(key){
+        if(!this.data[key]){
             return false;
         } else {
-            return data[key];
+            return this.data[key];
         }
     }
 
-    this.deleteValue = function(key){
-        if(key in data){
-            delete data[key];
+    deleteValue(key){
+        if(key in this.data){
+            delete this.data[key];
             return true;
         } else {
             return false;
         }
     }
 
-    this.getKey = function(){
-        const arrayKeys = Object.keys(data);
+    getKey(){
+        const arrayKeys = Object.keys(this.data);
         if(arrayKeys.length !== 0){
             return arrayKeys;
         } else {
@@ -40,7 +45,7 @@ const checkAlco = document.getElementById('check_alcohol_id');
 const getInfoInput = document.getElementById('get_info_id');
 const showInfoDiv = document.getElementById('fullInfo_id');
 
-const logic = new HashStorageFunc();
+const logic = new HashStorageClass({});
 
 document.getElementById('add_button').onclick = () =>{
     if(!inputNameDrink.value){

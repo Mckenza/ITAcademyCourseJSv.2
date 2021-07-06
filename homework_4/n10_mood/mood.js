@@ -6,9 +6,9 @@ function random(start, end){
 function mood(colorsCount){
     const arrayColors = ['оранжевый', 'красный', 'желтый', 'зеленый', 'голубой', 'синий', 'фиолетовый', 'черный', ];
 
-    if(colorsCount > arrayColors.length){
-        console.log('Цветов в масиве меньше, чем введенное значение');
-        return;
+    if(colorsCount > arrayColors.length || colorsCount <= 0){
+        console.log('Неправильное значение');
+        return false;
     }
     console.log('Цветов: ' + colorsCount);
     
@@ -26,4 +26,7 @@ function mood(colorsCount){
 }
 
 const obj = mood(3);
-console.log(Object.keys(obj).toString());
+if(obj){
+    console.log(Object.keys(obj).toString());
+}
+
