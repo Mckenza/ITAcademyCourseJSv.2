@@ -7,14 +7,14 @@ class HashStorageClass{
     }
     
     addValue(key, value){
-        if(typeof key === 'string' || !value){
+        if(typeof key === 'string'){
             this.data[key] = value;
         }
     }
 
     getValue(key){
         if(!this.data[key]){
-            return false;
+            return undefined;
         } else {
             return this.data[key];
         }
@@ -31,11 +31,7 @@ class HashStorageClass{
 
     getKey(){
         const arrayKeys = Object.keys(this.data);
-        if(arrayKeys.length !== 0){
-            return arrayKeys;
-        } else {
-            return false;
-        }
+        return arrayKeys;
     }
 }
 
@@ -85,7 +81,7 @@ document.getElementById('del_button').onclick = () =>{
 
 document.getElementById('all_list_button').onclick = () =>{
     const arrayKeys = logic.getKey();
-    if(!arrayKeys){
+    if(arrayKeys.length === 0){
         showInfoDiv.textContent = 'нет элементов списка';
     } else {
         let str = '';

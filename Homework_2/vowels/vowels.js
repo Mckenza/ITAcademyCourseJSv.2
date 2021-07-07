@@ -9,19 +9,17 @@ const objLetters = {
     'у': 0,
     'ю': 0,
     'я': 0,
-    sum: 0,
 }
 
 function countLetters(str){
+    let sum = 0;
     const bufArray = Array.from(str.toString().toLowerCase());
     bufArray.forEach((value) =>{
         if(value in objLetters){
-            objLetters[value]++;
-            objLetters.sum++;
+            sum++;
         }
     });
-    return objLetters.sum;
+    return sum;
 }
 
 alert('Согласных букв: ' + countLetters(prompt('Введите строку')));
-console.log(objLetters);
