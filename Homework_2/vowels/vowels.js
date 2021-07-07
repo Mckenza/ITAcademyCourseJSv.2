@@ -23,4 +23,3 @@ function countLetters(str){
 }
 
 alert('Согласных букв: ' + countLetters(prompt('Введите строку')));
-console.log(objLetters);

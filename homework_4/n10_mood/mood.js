@@ -28,7 +28,6 @@ function mood(colorsCount){
 }
 
 const obj = mood(3);
-console.log(obj);
 if(obj){
     alert(Object.keys(obj).toString());
 }
