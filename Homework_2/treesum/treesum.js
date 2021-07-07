@@ -10,12 +10,13 @@ function treesum(array) {
 }
 
 /* без вложенных функций  */
-let sum = 0;
 
 function dd(array) {
+    let sum = 0;
     for (let i = 0; i < array.length; i++) {
         if (Array.isArray(array[i])) {
-            dd(array[i]);
+            console.log(sum);
+            sum += dd(array[i]);
             continue;
         }
         sum += array[i];

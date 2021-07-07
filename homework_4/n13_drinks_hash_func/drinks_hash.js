@@ -2,14 +2,14 @@ function HashStorageFunc(){
     const data = {};
     
     this.addValue = function(key, value){
-        if(typeof key === 'string' || !value){
+        if(typeof key === 'string'){
             data[key] = value;
         }
     }
 
     this.getValue = function(key){
         if(!data[key]){
-            return false;
+            return undefined;
         } else {
             return data[key];
         }
@@ -26,11 +26,7 @@ function HashStorageFunc(){
 
     this.getKey = function(){
         const arrayKeys = Object.keys(data);
-        if(arrayKeys.length !== 0){
-            return arrayKeys;
-        } else {
-            return false;
-        }
+        return arrayKeys;
     }
 }
 
@@ -80,7 +76,7 @@ document.getElementById('del_button').onclick = () =>{
 
 document.getElementById('all_list_button').onclick = () =>{
     const arrayKeys = logic.getKey();
-    if(!arrayKeys){
+    if(arrayKeys.length === 0){
         showInfoDiv.textContent = 'нет элементов списка';
     } else {
         let str = '';

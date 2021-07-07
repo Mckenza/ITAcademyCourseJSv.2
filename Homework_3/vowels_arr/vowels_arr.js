@@ -9,23 +9,21 @@ const objLetters = {
     'у': 0,
     'ю': 0,
     'я': 0,
-    sum: 0,
 }
 
 /* ForEach */
 function countLetters(str){
+    let sum = 0;
     const bufArray = Array.from(str.toString().toLowerCase());
     bufArray.forEach((value) =>{
         if(value in objLetters){
-            objLetters.sum++;
+            sum++;
         }
     });
-    return objLetters.sum;
+    return sum;
 }
 
-alert('Согласных букв: ' + countLetters(prompt('Введите строку (ForEach)')));
-console.log(objLetters);
-clearObj();           // очищаю объект от значений перед следующим поиском                                                          
+alert('Согласных букв: ' + countLetters(prompt('Введите строку (ForEach)')));                                                 
 
 /* filter */
 function countLettersFilter(str){
@@ -35,31 +33,19 @@ function countLettersFilter(str){
 }
 
 alert('Согласных букв: ' + countLettersFilter(prompt('Введите строку (filter)')));
-console.log(objLetters);
-clearObj();
 
 /* reduce */
 function countLettersReduce(str){
+    let sum = 0;
     const bufArray = Array.from(str.toString().toLowerCase());
-    objLetters.sum = bufArray.reduce((acc, value) =>{
+    sum = bufArray.reduce((acc, value) =>{
         if(value in objLetters){
             acc++;
         }
         return acc;
     }, 0);
 
-    return objLetters.sum;
+    return sum;
 }
 
 alert('Согласных букв: ' + countLettersReduce(prompt('Введите строку (reduce)')));
-console.log(objLetters);
-//clearObj();
-
-
-
-
-function clearObj(){
-    for(let value in objLetters){
-        objLetters[value] = 0;
-    }
-}
