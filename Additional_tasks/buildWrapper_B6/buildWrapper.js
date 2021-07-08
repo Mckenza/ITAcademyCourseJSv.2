@@ -42,3 +42,11 @@ console.log(wrapH1('СТИХИ', { align: 'center', title: "M&M's" }));
 
 const test = wrapper('div');
 console.log(test('обычный div & символы: \' -- " -- < -- > ', { class: 'div_wrapper', id: 'id_001' }));
+
+const textArea = document.getElementById('result');
+textArea.value = `${wrap('Однажды в студёную зимнюю пору')}
+    ${wrap('Однажды в студёную зимнюю пору', { lang: 'ru' })}
+    ${wrap('Однажды в <студёную> зимнюю пору')}
+    ${wrapH1('СТИХИ', { align: 'center', title: "M&M's" })}
+    ${test('обычный div & символы: \' -- " -- < -- > ', { class: 'div_wrapper', id: 'id_001' })}
+`
