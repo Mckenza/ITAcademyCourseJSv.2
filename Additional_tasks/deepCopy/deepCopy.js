@@ -75,6 +75,10 @@ const one = {
     n: NaN,
     number: 54,
     bool: true,
+    testf: {
+        f: true,
+        f3: [1,5,2, [5,3,5]],
+    }
 };
 
 //const a = deepCopy(one);
@@ -104,19 +108,25 @@ function test(objForCopy){
     const copyObj = deepCopy(objForCopy);
     const report = {};
 
-    searchAllKeys([objForCopy, copyObj], ['obj', 'copy']);
+    if(typeof objForCopy === 'number'){
+        number(objForCopy, copyObj);
+    }
+    if(typeof objForCopy === 'object'){
+        searchAllKeys([objForCopy, copyObj], ['obj', 'copy']);
+    }
 
     function searchAllKeys(arrayObj, str){
         const keys = Object.keys(arrayObj[0]);
         keys.forEach(value =>{
-            if(typeof arrayObj[0][value] === 'object'){
-
+            if(typeof arrayObj[0][value] === 'object' && typeof arrayObj[1][value] === 'object'){
                 if(arrayObj[0][value] === arrayObj[1][value]){
                     console.log('тест провален - не глубокая копия');
                     return;
                 } else {
+                    
                     const str1 = `${str[0]}.${value}`;
                     const str2 = `${str[1]}.${value}`;
+                    report[`${str[0]} === ${str[1]}`] = (arrayObj[0][value] === arrayObj[1][value]);
                     report[`${str1} === ${str2}`] = (arrayObj[0][value] === arrayObj[1][value]);
                     searchAllKeys([arrayObj[0][value], arrayObj[1][value]], [str1, str2]);
                 }        
@@ -127,7 +137,11 @@ function test(objForCopy){
         return;
     }
 
+    function number(numCopy){
+            report[`${numCopy} isNumber`] = (copyObj === objForCopy);
+    }
+
     return report;
 }
 
-console.log(test(one));
+console.log(test(54));
