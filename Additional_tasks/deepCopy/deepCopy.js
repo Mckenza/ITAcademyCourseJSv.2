@@ -1,53 +1,60 @@
 
-function deepCopy(value){
-    if(typeof value === 'string'){
+function deepCopy(value) {
+    if (typeof value === 'string') {
         return value;
     }
 
-    if(typeof value === 'object'){
-        return copyObj(value);
-    }
-
-    if(value === undefined){
-        return undefined;
-    }
-
-    if(value === null){
+    if (value === null) {
         return null;
     }
 
-    if(typeof value === 'number'){
+    if (typeof value === 'object') {
+        return copyObj(value);
+    }
+
+    if (value === undefined) {
+        return undefined;
+    }
+
+    if (typeof value === 'number') {
         return value;
     }
 
-    if(Array.isArray(value)){
+    if(typeof value === 'boolean'){
+        return value;
+    }
+
+    if (Array.isArray(value)) {
         return copyArray(value);
     }
 
-    function copyObj(obj){
+    function copyObj(obj) {
         const newObj = {};
-        for(let value in obj){
-            if(typeof obj[value] === 'object'){
+        for (let value in obj) {
+            if (typeof obj[value] === 'object' && obj[value] !== null) {
                 newObj[value] = copyObj(obj[value]);
                 continue;
             }
-            if(Array.isArray(obj[value])){
+            if (Array.isArray(obj[value])) {
                 newObj[value] = copyArray(obj[value]);
                 continue;
+            }
+            if(obj[value === null]){
+                newObj[value] = null;
             }
             newObj[value] = obj[value];
         }
         return newObj;
     }
 
-    function copyArray(array){
+    function copyArray(array) {
         const newArray = [];
-        for(let value of array){
-            if(Array.isArray(value)){
+        for (let value of array) {
+            if (Array.isArray(value)) {
                 newArray.push(copyArray);
                 continue;
             }
-            if(typeof value === 'object'){
+            if (typeof value === 'object') {
                 newArray.push(copyObj(value));
             }
             newArray.push(value);
@@ -57,91 +64,156 @@ function deepCopy(value){
 }
 
 const one = {
-    a: 1, 
-    b: 2, 
+    a: 1,
+    b: 2,
     c: {
-        d: 4, 
+        d: 4,
         e: {
             f: 10,
-            ddddd: true, 
+            ddddd: true,
             dd: [{
-                aaa: 1, 
-                aa2: [1,4,3],
-            }, [1,3,4]]
+                aaa: 1,
+                aa2: [1, 4, 3],
+            }, [1, 3, 4]]
         }
-    }, 
-    g: [1,2,3],
+    },
+    g: [1, 2, 3],
     unde: undefined,
     n: NaN,
     number: 54,
     bool: true,
     testf: {
         f: true,
-        f3: [1,5,2, [5,3,5]],
+        f3: [1, 5, 2, [5, 3, 5]],
     }
 };
 
-//const a = deepCopy(one);
 
-
-/*
-const two = deepCopy(one);
-
-console.log(two);
-console.log(two.c === one.c);
-console.log(two.c.e === one.c.e);
-console.log(two.g === one.g)
-console.log(one.c.e.dd[0] === two.c.e.dd[0]);
-console.log(one.c.e.dd[1] === two.c.e.dd[1]);
-console.log(one.bool === two.bool);
-console.log(one.c.e.ddddd === two.c.e.ddddd)
-
-
-console.log(one === deepCopy(one));
-
-const s = [1,2,4,5,7, {f: 4}];
-const s2 = deepCopy(s);
-console.log(s[5] === s2[5]);
-*/
-
-function test(objForCopy){
+function test(objForCopy) {
     const copyObj = deepCopy(objForCopy);
     const report = {};
 
-    if(typeof objForCopy === 'number'){
-        number(objForCopy, copyObj);
-    }
-    if(typeof objForCopy === 'object'){
+    if (typeof copyObj === 'object' && typeof objForCopy === 'object') {
         searchAllKeys([objForCopy, copyObj], ['obj', 'copy']);
+    } else {
+        checkAll(objForCopy, copyObj);
     }
 
-    function searchAllKeys(arrayObj, str){
+    function searchAllKeys(arrayObj, str) {
         const keys = Object.keys(arrayObj[0]);
-        keys.forEach(value =>{
-            if(typeof arrayObj[0][value] === 'object' && typeof arrayObj[1][value] === 'object'){
-                if(arrayObj[0][value] === arrayObj[1][value]){
-                    console.log('тест провален - не глубокая копия');
+        keys.forEach(value => {
+            report[`${str[0]} === ${str[1]} => ${nanAndArray(arrayObj[0])}`] = (arrayObj[0] === arrayObj[1]);
+            if (typeof arrayObj[0][value] === 'object' && typeof arrayObj[1][value] === 'object' && arrayObj[0][value] !== null) {
+                if (arrayObj[0][value] === arrayObj[1][value]) {
+                    console.log('тест провален - не глубокая копия', arrayObj[0][value]);
                     return;
                 } else {
-                    
                     const str1 = `${str[0]}.${value}`;
                     const str2 = `${str[1]}.${value}`;
-                    report[`${str[0]} === ${str[1]}`] = (arrayObj[0][value] === arrayObj[1][value]);
-                    report[`${str1} === ${str2}`] = (arrayObj[0][value] === arrayObj[1][value]);
+                    report[`${str1} === ${str2} => ${nanAndArray(arrayObj[0][value])}`] = (arrayObj[0][value] === arrayObj[1][value]);
                     searchAllKeys([arrayObj[0][value], arrayObj[1][value]], [str1, str2]);
-                }        
+                }
             } else {
-                report[`${str[0]}.${value} === ${str[1]}.${value}`] = (arrayObj[0][value] === arrayObj[1][value]);
+                report[`${str[0]}.${value} === ${str[1]}.${value} => ${nanAndArray(arrayObj[0][value])}`] = (arrayObj[0][value] === arrayObj[1][value]);
             }
         })
         return;
     }
 
-    function number(numCopy){
-            report[`${numCopy} isNumber`] = (copyObj === objForCopy);
+    function checkAll(obj, copy) {
+        if (typeof copy === 'number' && copy.toString() !== 'NaN') {
+            report[`${obj} obj === ${copy} copy  --  number`] = (copy === obj);
+            return 'number';
+        }
+
+        if (typeof copy === 'number' && copy.toString() === 'NaN') {
+            report[`${obj} obj === ${copy} copy  --  NaN`] = (copy === obj);
+            return 'NaN'
+        }
+
+        if (obj === null && copy === null) {
+            report[`${obj} obj === ${copy} copy  --  null`] = (copy === obj);
+            return 'null';
+        }
+
+        if (obj === undefined && copy === undefined) {
+            report[`${obj} obj === ${copy} copy  --  undefined`] = (copy === obj);
+            return 'undefined';
+        }
+
+        if (Array.isArray(obj) && Array.isArray(copy)) {
+            report[`${obj} obj === ${copy} copy  --  array`] = (copy === obj);
+            return 'array';
+        }
+
+        if (typeof obj === 'string' && typeof copy === 'string') {
+            report[`${obj} obj === ${copy} copy  --  string`] = (copy === obj);
+            return 'string';
+        }
+
+        if (typeof obj === 'boolean' && typeof copy === 'boolean' && (obj.toString() === 'true' || obj.toString() === 'false')) {
+            report[`${obj} obj === ${copy} copy  --  boolean`] = (copy === obj);
+            return 'boolean';
+        }
+    }
+
+    function nanAndArray(value) {
+        if (Array.isArray(value)) {
+            return 'array';
+        } else if (typeof value === 'number' && value.toString() === 'NaN') {
+            return 'NaN';
+        } else if (value === null){
+            return 'null';
+        } else {
+            return typeof value;
+        }
     }
 
     return report;
 }
 
-console.log(test(54));
+const h1 = { a: 5, b: { b1: 6, b2: 7 }, c: [33, 22], d: null, e: undefined, f: Number.NaN };
+const h2 = [5, { b1: 6, b2: 7 }, [33, 22], null, undefined, Number.NaN];
+
+const objTest = {
+    0: false,
+    1: true,
+    2: false,
+    3: true,
+    4: true,
+    5: false,
+    6: true,
+    7: true,
+    8: true,
+    9: true,
+    10: false,
+}
+
+function compare(deepTest, objResult){
+    const arrayTest = [];
+    const arrayResult = [];
+
+    for(let value in deepTest){
+        arrayTest.push(deepTest[value]);
+    }
+
+    for(let value in objResult){
+        arrayResult.push(objResult[value])
+    }
+
+    if(arrayTest.length === arrayResult.length){
+        if(arrayTest.every((value, index) => value === arrayResult[index]) && isNaN(deepTest.f && deepTest.c instanceof Array)){
+            console.log('ПРОШЕЛ');
+        } else {
+            console.log('НЕ ПРОШЕЛ');
+        }
+    } else {
+        console.log('НЕ ПРОШЕЛ');
+    }
+}
+
+console.log(h1);
+compare(test(h1), objTest);
+console.log(h2);
+compare(test(h2), objTest);
+
