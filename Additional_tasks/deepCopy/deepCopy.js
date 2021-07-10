@@ -20,7 +20,7 @@ function deepCopy(value) {
         return value;
     }
 
-    if(typeof value === 'boolean'){
+    if (typeof value === 'boolean') {
         return value;
     }
 
@@ -39,7 +39,7 @@ function deepCopy(value) {
                 newObj[value] = copyArray(obj[value]);
                 continue;
             }
-            if(obj[value === null]){
+            if (obj[value === null]) {
                 newObj[value] = null;
             }
             newObj[value] = obj[value];
@@ -163,7 +163,7 @@ function test(objForCopy) {
             return 'array';
         } else if (typeof value === 'number' && value.toString() === 'NaN') {
             return 'NaN';
-        } else if (value === null){
+        } else if (value === null) {
             return 'null';
         } else {
             return typeof value;
@@ -193,25 +193,20 @@ const objTest = {
     10: false,
 }
 
-const objTestTwo = {
-    0: true,
-    1: true,
-}
-
-function compare(deepTest, objResult){
+function compare(deepTest, objResult) {
     const arrayTest = [];
     const arrayResult = [];
 
-    for(let value in deepTest){
+    for (let value in deepTest) {
         arrayTest.push(deepTest[value]);
     }
 
-    for(let value in objResult){
+    for (let value in objResult) {
         arrayResult.push(objResult[value])
     }
 
-    if(arrayTest.length === arrayResult.length){
-        if(arrayTest.every((value, index) => value === arrayResult[index]) && isNaN(deepTest.f && deepTest.c instanceof Array)){
+    if (arrayTest.length === arrayResult.length) {
+        if (arrayTest.every((value, index) => value === arrayResult[index]) && isNaN(deepTest.f && deepTest.c instanceof Array)) {
             console.log('ПРОШЕЛ');
         } else {
             console.log('НЕ ПРОШЕЛ');
@@ -221,9 +216,9 @@ function compare(deepTest, objResult){
     }
 }
 
-function parseObj(obj){
+function parseObj(obj) {
     const array = Object.keys(obj);
-    if(obj[array[0]] || obj[array[1]]){
+    if (obj[array[0]] || obj[array[1]]) {
         return 'ПРОШЕЛ';
     } else {
         return 'НЕ ПРОШЕЛ';
