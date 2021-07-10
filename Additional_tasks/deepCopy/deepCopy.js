@@ -1,27 +1,7 @@
 
 function deepCopy(value) {
-    if (typeof value === 'string') {
-        return value;
-    }
-
-    if (value === null) {
-        return null;
-    }
-
-    if (typeof value === 'object') {
+    if (typeof value === 'object' && value !== null) {
         return copyObj(value);
-    }
-
-    if (value === undefined) {
-        return undefined;
-    }
-
-    if (typeof value === 'number') {
-        return value;
-    }
-
-    if (typeof value === 'boolean') {
-        return value;
     }
 
     if (Array.isArray(value)) {
@@ -39,9 +19,6 @@ function deepCopy(value) {
                 newObj[value] = copyArray(obj[value]);
                 continue;
             }
-            if (obj[value === null]) {
-                newObj[value] = null;
-            }
             newObj[value] = obj[value];
         }
         return newObj;
@@ -51,16 +28,17 @@ function deepCopy(value) {
         const newArray = [];
         for (let value of array) {
             if (Array.isArray(value)) {
-                newArray.push(copyArray);
+                newArray.push(copyArray(value));
                 continue;
             }
-            if (typeof value === 'object') {
+            if (typeof value === 'object' && value !== null) {
                 newArray.push(copyObj(value));
             }
             newArray.push(value);
         }
         return newArray;
     }
+    return value;
 }
 
 const one = {
@@ -74,6 +52,7 @@ const one = {
             dd: [{
                 aaa: 1,
                 aa2: [1, 4, 3],
+                aaa3: null,
             }, [1, 3, 4]]
         }
     },
@@ -85,9 +64,9 @@ const one = {
     testf: {
         f: true,
         f3: [1, 5, 2, [5, 3, 5]],
-    }
+    },
+    f: [null, undefined]
 };
-
 
 function test(objForCopy) {
     const copyObj = deepCopy(objForCopy);
@@ -169,7 +148,6 @@ function test(objForCopy) {
             return typeof value;
         }
     }
-
     return report;
 }
 
@@ -236,4 +214,3 @@ console.log(z1);
 console.log(parseObj(test(z1)));
 console.log(n1);
 console.log(parseObj(test(n1)));
-
