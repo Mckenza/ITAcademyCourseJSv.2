@@ -93,7 +93,7 @@ function test(objForCopy) {
     const copyObj = deepCopy(objForCopy);
     const report = {};
 
-    if (typeof copyObj === 'object' && typeof objForCopy === 'object') {
+    if (typeof copyObj === 'object' && typeof objForCopy === 'object' && copyObj !== null) {
         searchAllKeys([objForCopy, copyObj], ['obj', 'copy']);
     } else {
         checkAll(objForCopy, copyObj);
@@ -128,6 +128,7 @@ function test(objForCopy) {
 
         if (typeof copy === 'number' && copy.toString() === 'NaN') {
             report[`${obj} obj === ${copy} copy  --  NaN`] = (copy === obj);
+            report[`typeof ${obj} === typeof ${copy} --  NaN`] = (typeof copy === typeof obj);
             return 'NaN'
         }
 
@@ -174,6 +175,9 @@ function test(objForCopy) {
 
 const h1 = { a: 5, b: { b1: 6, b2: 7 }, c: [33, 22], d: null, e: undefined, f: Number.NaN };
 const h2 = [5, { b1: 6, b2: 7 }, [33, 22], null, undefined, Number.NaN];
+const v1 = 'sss';
+const z1 = null;
+const n1 = Number.NaN;
 
 const objTest = {
     0: false,
@@ -187,6 +191,11 @@ const objTest = {
     8: true,
     9: true,
     10: false,
+}
+
+const objTestTwo = {
+    0: true,
+    1: true,
 }
 
 function compare(deepTest, objResult){
@@ -212,8 +221,24 @@ function compare(deepTest, objResult){
     }
 }
 
+function parseObj(obj){
+    const array = Object.keys(obj);
+    if(obj[array[0]] || obj[array[1]]){
+        return 'ПРОШЕЛ';
+    } else {
+        return 'НЕ ПРОШЕЛ';
+    }
+}
+
+
 console.log(h1);
 compare(test(h1), objTest);
 console.log(h2);
 compare(test(h2), objTest);
+console.log(v1);
+console.log(parseObj(test(v1)));
+console.log(z1);
+console.log(parseObj(test(z1)));
+console.log(n1);
+console.log(parseObj(test(n1)));
 
