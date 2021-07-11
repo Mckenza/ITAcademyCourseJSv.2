@@ -1,11 +1,10 @@
 
 function deepCopy(value) {
-    if (typeof value === 'object' && value !== null) {
-        return copyObj(value);
-    }
-
     if (Array.isArray(value)) {
         return copyArray(value);
+    }
+    if (typeof value === 'object' && value !== null) {
+        return copyObj(value);
     }
 
     function copyObj(obj) {
@@ -33,6 +32,7 @@ function deepCopy(value) {
             }
             if (typeof value === 'object' && value !== null) {
                 newArray.push(copyObj(value));
+                continue;
             }
             newArray.push(value);
         }
@@ -156,6 +156,7 @@ const h2 = [5, { b1: 6, b2: 7 }, [33, 22], null, undefined, Number.NaN];
 const v1 = 'sss';
 const z1 = null;
 const n1 = Number.NaN;
+
 
 const objTest = {
     0: false,
