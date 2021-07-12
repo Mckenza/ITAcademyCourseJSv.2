@@ -10,12 +10,12 @@ function deepCopy(value) {
     function copyObj(obj) {
         const newObj = {};
         for (let value in obj) {
-            if (typeof obj[value] === 'object' && obj[value] !== null) {
-                newObj[value] = copyObj(obj[value]);
-                continue;
-            }
             if (Array.isArray(obj[value])) {
                 newObj[value] = copyArray(obj[value]);
+                continue;
+            }
+            if (typeof obj[value] === 'object' && obj[value] !== null) {
+                newObj[value] = copyObj(obj[value]);
                 continue;
             }
             newObj[value] = obj[value];
@@ -67,6 +67,7 @@ const one = {
     },
     f: [null, undefined]
 };
+
 
 function test(objForCopy) {
     const copyObj = deepCopy(objForCopy);
