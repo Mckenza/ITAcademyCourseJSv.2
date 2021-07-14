@@ -1,4 +1,4 @@
-const testArray = ["ЛУЖА", "МУЗА", "ЛИРА", "МЕХА", "ЛИГА", "ТАРА", "ЛИПА", "ТУРА", "ПАРК", "ЛОЖЬ", "ЛУПА", "ПЛОТ", "МУРА", "ПАУК", "ПАУТ", "ПЛУТ", "ЛОЖА", "СЛОТ", "ПАРА"];
+const testArray = ["ЛУЖА", "МУЗА", "ЛИРА", "МЕХА", "ЛИГА", "ТАРА","ЛИПА", "ТУРА", "ПАРК", "ЛОЖЬ", "ЛУПА", "ПЛОТ", "МУРА", "ПАУК", "ПАУТ", "ПЛУТ", "ЛОЖА", "СЛОТ", "ПАРА"];
 
 function chainWord(startWord, finishWord) {
     const resultArray = [];
@@ -8,31 +8,36 @@ function chainWord(startWord, finishWord) {
     searchWord(startWord);
 
     function searchWord(firstWord) {
-        const func = countChangeableLetter(firstWord);
-        let arrayChain = mainArray.reduce((acc, value) => func(value), []);
+        try {
+            const func = countChangeableLetter(firstWord);
+            let arrayChain = mainArray.reduce((acc, value) => func(value), []);
 
-        if (func(finishWord).length === 1 && func(finishWord)[0] === finishWord) {
-            resultArray.push(finishWord);
-            return;
-        }
-
-        const currentWord = arrayChain[arrayChain.length - 1];
-
-        if (arrayChain.length > 1) {
-            for (let i = 0; i < arrayChain.length; i++) {
-                mainArray.splice(mainArray.indexOf(arrayChain[i]), 1);
+            if (func(finishWord).length === 1 && func(finishWord)[0] === finishWord) {
+                resultArray.push(finishWord);
+                return;
             }
-        } else {
-            mainArray.splice(mainArray.indexOf(currentWord), 1);
-        }
 
-        resultArray.push(currentWord);
+            const currentWord = arrayChain[arrayChain.length - 1];
 
-        if (mainArray.length === 0) {
-            resultArray.push(finishWord);
-            return;
-        } else {
-            searchWord(currentWord);
+            if (arrayChain.length > 1) {
+                for (let i = 0; i < arrayChain.length; i++) {
+                    mainArray.splice(mainArray.indexOf(arrayChain[i]), 1);
+                }
+            } else {
+                mainArray.splice(mainArray.indexOf(currentWord), 1);
+            }
+
+            resultArray.push(currentWord);
+
+            if (mainArray.length === 0) {
+                resultArray.push(finishWord);
+                return;
+            } else {
+                searchWord(currentWord);
+            }
+        } catch (e) {
+            console.log(e);
+
         }
     }
 
@@ -43,6 +48,9 @@ function chainWord(startWord, finishWord) {
         const returnArray = [];
         return function (nextWord) {
             let compare = 0;
+            if (wordStart === undefined) {
+                throw 'такой цепи нет';
+            }
             for (let i = 0; i < wordStart.length; i++) {
                 if (wordStart[i] !== nextWord[i]) {
                     compare++;
