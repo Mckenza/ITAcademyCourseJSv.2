@@ -2,6 +2,7 @@
 const testStr = '(6+10-4)/(1+1*2)+1';
 const test = ('5*2+10');
 
+
 const obj = {
     '/': 2,
     '*': 2,
@@ -51,11 +52,8 @@ function calc(str){
             numbersArray.push(operandArray.pop());
         }
     }
-
-    console.log(operandArray, 1);
-    console.log(numbersArray, 2);
-    console.log('-----------------------')
     
+    return numbersArray;
 }
 
 function parseStr(str){
@@ -81,5 +79,37 @@ function parseStr(str){
     return returnArray;
 }
 
+function revers(array){
+    const bufArray = [];
+    const argsArray = [...array];
+
+    argsArray.map((value, index) =>{
+        if(value in obj){
+            let first = Number(bufArray.pop());
+            let second = Number(bufArray.pop());
+            if(value === '*'){
+                bufArray.push(second * first);
+            }
+            if(value === '/'){
+                bufArray.push(second / first);
+            }
+            if(value === '+'){
+                bufArray.push(second + first);
+            }
+            if(value === '-'){
+                bufArray.push(second - first);
+            }
+        } else {
+            bufArray.push(Number(argsArray[index]));
+        }
+        console.log(bufArray, '-----');
+    })
+
+    return bufArray;
+}
+
 console.log(calc(testStr));
 console.log(calc(test));
+
+console.log(revers(calc(testStr)));
+console.log(revers(calc(test)));
