@@ -1,5 +1,5 @@
-const testStr = '-6+(-6+10-4)*(1+1*-2)+1+-1';
-const test = '-2*(-5-4)';
+const testStr = '(-6+10-4)*(1+1*-2)+1.6';
+const test = '-2*(-4.5-4.5)';
 const teeeest = '2*(-3+1)';
 
 const obj = {
