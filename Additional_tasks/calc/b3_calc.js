@@ -1,7 +1,6 @@
-
-const testStr = '(6+10-4)/(1+1*2)+1';
-const test = ('5*2+10');
-
+const testStr = '-6+(-6+10-4)*(1+1*-2)+1+-1';
+const test = '-2*(-5-4)';
+const teeeest = '2*(-3+1)';
 
 const obj = {
     '/': 2,
@@ -9,7 +8,6 @@ const obj = {
     '+': 1,
     '-': 1,
 }
-
 
 function calc(str){
     const buffArray = parseStr(str);
@@ -30,13 +28,10 @@ function calc(str){
             }
         } else {
             if(value in obj){
-                if(obj[value] === obj[operandArray[operandArray.length - 1]]){
+                if(obj[value] <= obj[operandArray[operandArray.length - 1]]){
                     numbersArray.push(operandArray.pop());
                     operandArray.push(value);
-                } else if (obj[value] > obj[operandArray[operandArray.length - 1]]){
-                    operandArray.push(value);
-                } else if (obj[value] < obj[operandArray[operandArray.length - 1]]) {
-                    numbersArray.push(operandArray.pop())
+                } else if (obj[value] > obj[operandArray[operandArray.length - 1]]) {
                     operandArray.push(value);
                 } else {
                     operandArray.push(value);
@@ -52,7 +47,6 @@ function calc(str){
             numbersArray.push(operandArray.pop());
         }
     }
-    
     return numbersArray;
 }
 
@@ -76,6 +70,16 @@ function parseStr(str){
     if(bufLetter){
         returnArray.push(bufLetter);
     }
+
+    returnArray.map((value, index) =>{
+        if(value === '-'){
+            if(index === 0){
+                returnArray.splice(0, 2, `-${returnArray[index + 1]}`);
+            } else if (returnArray[index - 1] in obj || returnArray[index - 1] === '('){
+                returnArray.splice(index, 2, `-${returnArray[index + 1]}`);
+            }
+        } 
+    })
     return returnArray;
 }
 
@@ -102,14 +106,14 @@ function revers(array){
         } else {
             bufArray.push(Number(argsArray[index]));
         }
-        console.log(bufArray, '-----');
     })
 
     return bufArray;
 }
 
-console.log(calc(testStr));
-console.log(calc(test));
-
-console.log(revers(calc(testStr)));
-console.log(revers(calc(test)));
+console.log(testStr);
+console.log(revers(calc(testStr))[0]);
+console.log(test);
+console.log(revers(calc(test))[0]);
+console.log(teeeest);
+console.log(revers(calc(teeeest))[0]);
