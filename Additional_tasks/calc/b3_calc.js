@@ -111,6 +111,11 @@ function revers(array){
     return bufArray;
 }
 
+const input = document.getElementById('input_id');
+document.getElementById('result').onclick = () =>{
+    alert(revers(calc(input.value))[0])
+}
+
 console.log(testStr);
 console.log(revers(calc(testStr))[0]);
 console.log(test);
