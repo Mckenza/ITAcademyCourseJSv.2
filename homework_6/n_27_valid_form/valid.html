@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="valid.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <form id="main_form" action="https://fe.it-academy.by/TestForm.php">
+            <div class="developers">
+                <span>Разработчики:</span>
+                <input type="text" id="1developers_id" name="dev">
+            </div>
+            <div class="name_site">
+                <span>Название сайта:</span>
+                <input type="text" id="2name_site_id" name="site">
+            </div>
+            <div class="url_site">
+                <span>URL сайта:</span>
+                <input type="text" id="3url_site_id" name="url">
+            </div>
+            <div class="date_start">
+                <span>Дата запуска:</span>
+                <input type="text" id="4date_start_id" name="date">
+            </div>
+            <div class="day_visitors">
+                <span>Посетителей в сутки:</span>
+                <input type="text" id="5day_visitors_id" name="visitors">
+            </div>
+            <div class="email">
+                <span>E-mail для связи:</span>
+                <input type="text" id="6email_id" name="email">
+            </div>
+            <div class="catalog">
+                <span>Рубрика каталога:</span>
+                <select id="7catalog_id" name="catalog">
+                    <option value="0" selected disabled>Выберите каталог...</option>
+                    <option value="1">Бытовая техника</option>
+                    <option value="2">Все для огорода</option>
+                    <option value="3">Мебель</option>
+                </select>
+            </div>
+            <div class="location">
+                <span>Размещение:</span>
+                <div class="radio_box" id="8div_radio_id">
+                    <input type="radio" value="free" name="radio_name">Бесплатное
+                    <input type="radio" value="nofree" name="radio_name">Платное
+                    <input type="radio" value="VIP" name="radio_name">VIP
+                </div>
+            </div>
+            <div class="feedback">
+                <span>Разрешить отзывы:</span>
+                <input type="checkbox" value="true" name="feedback">
+            </div>
+            <div class="description">
+                <span>Описание:</span>
+                <textarea name="textarea"></textarea>
+            </div>
+            <div class="submit">
+                <input type="submit" id="submit_id">
+            </div>
+        </form>
+    </main>
+    <script src="valid.js">
+    </script>
+</body>
+
+</html>
