@@ -1,0 +1,20 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.cont_image{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.position{
+    position: absolute;
+}
+
+.cursor{
+    cursor: move;
+}
+
+
