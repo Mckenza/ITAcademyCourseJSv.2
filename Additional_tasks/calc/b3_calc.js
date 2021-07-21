@@ -7,7 +7,6 @@ const obj = {
 
 function calc(str) {
     const buffArray = parseStr(str);
-
     const operandArray = [];
     const numbersArray = [];
 
@@ -52,7 +51,6 @@ function parseStr(str) {
     const returnArray = [];
 
     arrayBuf.map(value => {
-
         if (value in obj || value === '(' || value === ')') {
             if (bufLetter) {
                 returnArray.push(bufLetter);
@@ -69,13 +67,16 @@ function parseStr(str) {
 
     returnArray.map((value, index) => {
         if (value === '-') {
-            if (index === 0) {
+            if (index === 0 && returnArray[index + 1] === '(') {
+            } else if (index === 0) {
                 returnArray.splice(0, 2, `-${returnArray[index + 1]}`);
-            } else if (returnArray[index - 1] in obj || returnArray[index - 1] === '(') {
+            }
+            else if (returnArray[index - 1] in obj || returnArray[index - 1] === '(') {
                 returnArray.splice(index, 2, `-${returnArray[index + 1]}`);
             }
         }
     })
+    console.log(returnArray)
     return returnArray;
 }
 
@@ -83,10 +84,16 @@ function revers(array) {
     const bufArray = [];
     const argsArray = [...array];
 
-    argsArray.map((value, index) => {
+    console.log(array)
+    argsArray.map(value => {
         if (value in obj) {
             let first = Number(bufArray.pop());
             let second = Number(bufArray.pop());
+            
+            if(!second && value === '-'){
+                bufArray.push(0 - first);
+                return;
+            }
             if (value === '*') {
                 bufArray.push(second * first);
             }
@@ -100,8 +107,9 @@ function revers(array) {
                 bufArray.push(second - first);
             }
         } else {
-            bufArray.push(Number(argsArray[index]));
+            bufArray.push(Number(value));
         }
+        console.log(bufArray)
     })
     return bufArray;
 }
