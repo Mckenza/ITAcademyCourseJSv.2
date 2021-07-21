@@ -5,7 +5,7 @@
 
 main{
     height: 300px;
-    width: 320px;
+    width: 420px;
 }
 
 form{
@@ -28,7 +28,10 @@ main div{
 input:not(input[type='submit']){
     border: none;
     border-bottom: 2px solid black;
+}
 
+.redMessage{
+    color: red;
 }
 
 
