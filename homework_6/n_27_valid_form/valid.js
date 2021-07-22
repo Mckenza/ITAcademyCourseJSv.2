@@ -75,6 +75,14 @@ checkbox.onclick = () =>{
     }
 }
 
+catalog.addEventListener('change', (e)=>{
+    viewState['7catalog_id'] = true;
+        const parentElem = catalog.parentElement;
+        if(parentElem.querySelector('.redMessage')){
+            parentElem.querySelector('.redMessage').remove();
+        }
+})
+
 buttonSubmit.onclick = (e) => {
     let count = 0;
     for (let i = 0; i < radioButtons.length; i++) {
