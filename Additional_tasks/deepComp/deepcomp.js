@@ -1,66 +1,73 @@
+const objfaults = {
+    fault: 0,
+    success: 0,
+}
+
 function deepComp(first, second) {
     let trigger = true;
     if (Array.isArray(first) && Array.isArray(second)) {
-        if (first.length !== second.length) {
-            return false;
-        }
         return compareArrays(first, second);
     } else if (typeof first === 'object' && typeof second === 'object' && first !== null && second !== null) {
-        if((Array.isArray(first) && !Array.isArray(second)) || (!Array.isArray(first) && Array.isArray(second))){
-            return first === second;
+        if ((Array.isArray(first) && !Array.isArray(second)) || (!Array.isArray(first) && Array.isArray(second))) {
+            return false;
         }
         return compareObjects(first, second);
     } else {
-        if(isNaN(first) && isNaN(second) && typeof first !== 'string' && typeof second !== 'string'){
+        if (Number.isNaN(first) && Number.isNaN(second)) {
             return true;
         }
         return first === second;
     }
 
     function compareArrays(one, two) {
-        one.forEach((value, index) => {
+        if (one.length !== two.length) {
+            return false;
+        }
+        for (let i = 0; i < one.length; i++) {
             if (!trigger) {
-                return;
+                break;
             }
-            if (Array.isArray(one[index]) && Array.isArray(two[index])) {
-                return compareArrays(one[index], two[index]);
-            } else if (typeof one[index] === 'object' && typeof two[index] === 'object' && one[index] !== null && two[index] !== null) {
-                if((Array.isArray(one[index]) && !Array.isArray(two[index])) || (!Array.isArray(one[index]) && Array.isArray(two[index]))){
-                    return false;
-                }
-                return compareObjects(one[index], two[index]);
-            } else {
-                if(isNaN(one[index]) && isNaN(two[index]) && typeof one[index] !== 'string' && typeof two[index] !== 'string'){
-                    return;
-                }
-                if (one[index] !== two[index]) {
+            if (Array.isArray(one[i]) && Array.isArray(two[i])) {
+                return compareArrays(one[i], two[i]);
+            } else if (typeof one[i] === 'object' && typeof two[i] === 'object' && one[i] !== null && two[i] !== null) {
+                if ((Array.isArray(one[i]) && !Array.isArray(two[i])) || (!Array.isArray(one[i]) && Array.isArray(two[i]))) {
                     trigger = false;
+                    break;
+                }
+                return compareObjects(one[i], two[i]);
+            } else {
+                if (Number.isNaN(one[i]) && Number.isNaN(two[i])) {
+                    continue;
+                }
+                if (one[i] !== two[i]) {
+                    trigger = false;
+                    break;
                 }
             }
-        })
+        }
         return trigger;
     }
 
     function compareObjects(one, two) {
-        if(countObj(one) !== countObj(two)){
+        if (Object.keys(one).length !== Object.keys(two).length) {
             return false;
         }
         for (let value in one) {
             if (value in two) {
                 if (Array.isArray(one[value]) && Array.isArray(two[value])) {
-                    
-                    if(!compareArrays(one[value], two[value])){
+
+                    if (!compareArrays(one[value], two[value])) {
                         return false;
                     }
                 } else if (typeof one[value] === 'object' && typeof two[value] === 'object' && one[value] !== null && two[value] !== null) {
-                    if((Array.isArray(one[value]) && !Array.isArray(two[value])) || (!Array.isArray(one[value]) && Array.isArray(two[value]))){
+                    if ((Array.isArray(one[value]) && !Array.isArray(two[value])) || (!Array.isArray(one[value]) && Array.isArray(two[value]))) {
                         return false;
                     }
-                    if(!compareObjects(one[value], two[value])){
+                    if (!compareObjects(one[value], two[value])) {
                         return false;
                     }
                 } else {
-                    if(isNaN(one[value]) && isNaN(two[value]) && typeof one[value] !== 'string' && typeof two[value] !== 'string'){
+                    if (Number.isNaN(one[value]) && Number.isNaN(two[value])) {
                         return true;
                     }
                     if (one[value] !== two[value]) {
@@ -72,22 +79,6 @@ function deepComp(first, second) {
             }
         }
         return true;
-    }
-
-    function countObj(object){
-        let count = 0;
-        function plus(obj){
-            for(let value in obj){
-                if(typeof obj[value] === 'object' && !Array.isArray(obj[value]) && obj[value] !== null){
-                    count++;
-                    plus(obj[value]);
-                } else {
-                    count++;
-                }
-            }
-        }
-        plus(object);
-        return count;
     }
 }
 
@@ -105,23 +96,33 @@ var A1 = [5, 7];
 var A2 = [5, 5, 7];
 var A3 = [5, 8, 7];
 
-console.log(deepComp(H1,H2)) //будет true
-console.log(deepComp(H1,H3)) //будет false
-console.log(deepComp(H1,H4)) //будет false
-console.log(deepComp(H1,H5)) //будет false
-console.log(deepComp(H6,H7)) //будет true
-console.log(deepComp(H8,H9)) //будет false
-console.log(deepComp(H8,H10)) //будет false
-console.log(deepComp(null,H10)) //будет false
-console.log(deepComp(H10,null)) //будет false
-console.log(deepComp(null,null)) //будет true
-console.log(deepComp(null,undefined)) //будет false
-console.log(deepComp(5,"5")) //будет false
-console.log(deepComp(5,H1)) //будет false
-console.log(deepComp(A1,H1)) //будет false
-console.log(deepComp(A2,A3)) //будет false
-console.log(deepComp( {a:5,b:undefined}, {a:5,c:undefined} )) //будет false
-console.log(deepComp([5,7],{0:5,1:7})) //будет false 
-console.log(deepComp( [5,7],{0:5,1:7,length:2} )) //будет false
-console.log(deepComp("aaa","bbb")) //будет false
-console.log(deepComp(Number.NaN,Number.NaN)) //будет true
+const arrayTest = [[H1, H2], [H1, H3], [H1, H4], [H1, H5], [H6, H7], [H8, H9], [H8, H10], [null, H10], [H10, null], [null, null], [null, undefined],
+[5, "5"], [5, H1], [A1, H1], [A2, A3], [{ a: 5, b: undefined }, { a: 5, c: undefined }], [[5, 7], { 0: 5, 1: 7 }], [[5, 7], { 0: 5, 1: 7, length: 2 }], ["aaa", "bbb"], [Number.NaN, Number.NaN]];
+
+const arrayResult = [true, false, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true];
+
+function testComp(one, two, result) {
+    if (deepComp(one, two) === result) {
+        objfaults.success += 1;
+        console.log('Тест пройден');
+    } else {
+        objfaults.fault += 1;
+        console.log('Тест не пройден');
+    }
+}
+
+function showResult() {
+    alert(`Кол-во ошибочных - ${objfaults.fault};
+Кол-во успешных - ${objfaults.success};`);
+    console.log(`Кол-во ошибочных - ${objfaults.fault};
+Кол-во успешных - ${objfaults.success};`);
+}
+
+function auto(arrayFunc, arrayRes){
+    for(let i = 0; i < arrayFunc.length; i++){
+        testComp(arrayFunc[i][0], arrayFunc[i][1], arrayRes[i]);
+    }
+    showResult();
+}
+
+auto(arrayTest, arrayResult);
