@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+
+        .main_content{
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .imgBorder{
+            border: springgreen 2px solid;
+        }
+        .edit_img{
+            display: none;
+        }
+        .element_edit{
+            border: none;
+            height: 6px;
+            width: 6px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="main_content" id="main_div">
+        <img src="img/applebook.jpg" id="main_img" style="position: absolute; top: 50px; left: 80px;">
+        <div class="edit_img" id="edit_img_id">
+            <div class="element_edit" id="top_left"></div>
+            <div class="element_edit" id="top_center"></div>
+            <div class="element_edit" id="top_right"></div>
+            <div class="element_edit" id="bottom_left"></div>
+            <div class="element_edit" id="bottom_center"></div>
+            <div class="element_edit" id="bottom_right"></div>
+            <div class="element_edit" id="center_left"></div>
+            <div class="element_edit" id="center_right"></div>
+        </div>
+    </div>
+    <script src="editImg.js"></script>
+</body>
+</html>
