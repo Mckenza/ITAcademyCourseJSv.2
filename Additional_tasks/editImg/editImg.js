@@ -15,6 +15,9 @@ objCoordImg = {
     y: parseInt(mainImg.style.top),
     widthStart: mainImg.width,
     heightStart: mainImg.height,
+    coefficientX: (mainImg.height / mainImg.width).toFixed(2),
+    coefficientY: (mainImg.width / mainImg.height).toFixed(2),
+    forTopLeft: 0,
 }
 
 /* Динамически меняющиеся координаты и значения */
@@ -37,6 +40,7 @@ objElements = {
     center_right: 'top: 50%; right: -3px',
 }
 
+
 mainDiv.addEventListener('mousemove', (e) => {
     e.preventDefault();
     if (trigger) {
@@ -45,17 +49,57 @@ mainDiv.addEventListener('mousemove', (e) => {
         }
         if (objCurrent.currentAction === 'center_left') {
             mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
-            mainImg.style.left = e.pageX + 'px';
-
-            
+            if(e.pageX < objCoordImg.widthStart + objCoordImg.x){
+                mainImg.style.left = e.pageX + 'px';
+            }
         }
         if (objCurrent.currentAction === 'bottom_center') {
             mainImg.height = objCoordImg.heightStart + e.pageY - objCurrent.yStart - objCoordImg.y;
         }
         if (objCurrent.currentAction === 'top_center') {
             mainImg.height = objCoordImg.heightStart - e.pageY + objCoordImg.y;
-            mainImg.style.top = e.pageY + 'px';
+            if(e.pageY < objCoordImg.heightStart + objCoordImg.y){
+                mainImg.style.top = e.pageY + 'px';
+            }
+        }
+        if (objCurrent.currentAction === 'bottom_right') {
+            if (mainImg.height <= mainImg.width) {
+                mainImg.width = objCoordImg.widthStart + e.pageX - objCurrent.xStart - objCoordImg.x;
+                mainImg.height = objCoordImg.heightStart + ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX);
+            } else {
+                mainImg.width = objCoordImg.widthStart + ((e.pageY - objCurrent.yStart - objCoordImg.y) * objCoordImg.coefficientY);
+                mainImg.height = objCoordImg.heightStart + e.pageY - objCurrent.yStart - objCoordImg.y;
+            }
+        }
 
+        if (objCurrent.currentAction === 'bottom_left') {
+            mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
+            mainImg.height = objCoordImg.heightStart - ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX);
+            if (e.pageX <= objCoordImg.widthStart + objCoordImg.x) {
+                mainImg.style.left = e.pageX + 'px';
+            }
+        }
+
+        if (objCurrent.currentAction === 'top_left') {
+            mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
+            mainImg.height = objCoordImg.heightStart - ((e.pageX - objCoordImg.x) * objCoordImg.coefficientX);
+            if (e.pageX <= objCoordImg.widthStart + objCoordImg.x) {
+                mainImg.style.left = e.pageX + 'px';
+                mainImg.style.top = objCoordImg.y + ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX) + 'px';
+            }
+        }
+
+        if (objCurrent.currentAction === 'top_right') {
+            mainImg.width = objCoordImg.widthStart + e.pageX - objCurrent.xStart - objCoordImg.x;
+            mainImg.height = objCoordImg.heightStart + ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX);
+            if (e.pageX > objCoordImg.x) {
+                mainImg.style.top = objCoordImg.y - ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX) + 'px';
+            }
+        }
+
+        if (objCurrent.currentAction === 'edit_img_id') {
+            mainImg.style.top = e.pageY - objCurrent.yStart + 'px';
+            mainImg.style.left = e.pageX - objCurrent.xStart + 'px';
         }
 
         draw();
@@ -69,6 +113,8 @@ mainDiv.addEventListener('mouseup', (e) => {
     objCoordImg.heightStart = mainImg.height;
     objCoordImg.x = parseInt(mainImg.style.left);
     objCoordImg.y = parseInt(mainImg.style.top);
+    objCoordImg.coefficientX = (mainImg.height / mainImg.width).toFixed(2);
+    objCoordImg.coefficientY = (mainImg.width / mainImg.height).toFixed(2);
 })
 
 mainDiv.addEventListener('click', (e) => {
@@ -102,26 +148,39 @@ function draw() {
 editImg.addEventListener('mousedown', (e) => {
     objCurrent.currentAction = e.target.id;
 
+    if (e.target.id === 'edit_img_id') {
+        trigger = true;
+        objCurrent.xStart = e.offsetX;
+        objCurrent.yStart = e.offsetY;
+    }
+
     if (e.target.id === 'top_left') {
-
-
+        trigger = true;
+        objCurrent.yStart = 0;
+        objCurrent.xStart = 0;
     }
     if (e.target.id === 'top_center') {
         trigger = true;
         objCurrent.yStart = 0;
     }
     if (e.target.id === 'top_right') {
-        console.log('sdfs');
+        trigger = true;
+        objCurrent.yStart = 0;
+        objCurrent.xStart = mainImg.width;
     }
     if (e.target.id === 'bottom_left') {
-        console.log('sdfs');
+        trigger = true;
+        objCurrent.xStart = 0;
+        objCurrent.yStart = mainImg.height;
     }
     if (e.target.id === 'bottom_center') {
         trigger = true;
         objCurrent.yStart = mainImg.height;
     }
     if (e.target.id === 'bottom_right') {
-        console.log('sdfs');
+        trigger = true;
+        objCurrent.xStart = mainImg.width;
+        objCurrent.yStart = mainImg.height;
     }
     if (e.target.id === 'center_left') {
         trigger = true;
@@ -130,9 +189,5 @@ editImg.addEventListener('mousedown', (e) => {
     if (e.target.id === 'center_right') {
         trigger = true;
         objCurrent.xStart = mainImg.width;
-
     }
 })
-
-
-
