@@ -31,15 +31,14 @@ objCurrent = {
 
 objElements = {
     top_left: 'top: -3px; left: -3px',
-    top_center: 'top: -3px; left: 50%',
+    top_center: 'top: -3px; left: calc(50% - 2.5px)',
     top_right: 'top: -3px; right: -3px',
     bottom_left: 'bottom: -3px; left: -3px',
-    bottom_center: 'bottom: -3px; left: 50%',
+    bottom_center: 'bottom: -3px; left: calc(50% - 2.5px)',
     bottom_right: 'bottom: -3px; right: -3px',
-    center_left: 'top: 50%; left: -3px',
-    center_right: 'top: 50%; right: -3px',
+    center_left: 'top: calc(50% - 2.5px); left: -3px',
+    center_right: 'top: calc(50% - 2.5px); right: -3px',
 }
-
 
 mainDiv.addEventListener('mousemove', (e) => {
     e.preventDefault();
@@ -49,7 +48,7 @@ mainDiv.addEventListener('mousemove', (e) => {
         }
         if (objCurrent.currentAction === 'center_left') {
             mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
-            if(e.pageX < objCoordImg.widthStart + objCoordImg.x){
+            if (e.pageX < objCoordImg.widthStart + objCoordImg.x) {
                 mainImg.style.left = e.pageX + 'px';
             }
         }
@@ -58,7 +57,7 @@ mainDiv.addEventListener('mousemove', (e) => {
         }
         if (objCurrent.currentAction === 'top_center') {
             mainImg.height = objCoordImg.heightStart - e.pageY + objCoordImg.y;
-            if(e.pageY < objCoordImg.heightStart + objCoordImg.y){
+            if (e.pageY < objCoordImg.heightStart + objCoordImg.y) {
                 mainImg.style.top = e.pageY + 'px';
             }
         }
@@ -71,7 +70,6 @@ mainDiv.addEventListener('mousemove', (e) => {
                 mainImg.height = objCoordImg.heightStart + e.pageY - objCurrent.yStart - objCoordImg.y;
             }
         }
-
         if (objCurrent.currentAction === 'bottom_left') {
             mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
             mainImg.height = objCoordImg.heightStart - ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX);
@@ -79,7 +77,6 @@ mainDiv.addEventListener('mousemove', (e) => {
                 mainImg.style.left = e.pageX + 'px';
             }
         }
-
         if (objCurrent.currentAction === 'top_left') {
             mainImg.width = objCoordImg.widthStart - e.pageX + objCoordImg.x;
             mainImg.height = objCoordImg.heightStart - ((e.pageX - objCoordImg.x) * objCoordImg.coefficientX);
@@ -88,7 +85,6 @@ mainDiv.addEventListener('mousemove', (e) => {
                 mainImg.style.top = objCoordImg.y + ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX) + 'px';
             }
         }
-
         if (objCurrent.currentAction === 'top_right') {
             mainImg.width = objCoordImg.widthStart + e.pageX - objCurrent.xStart - objCoordImg.x;
             mainImg.height = objCoordImg.heightStart + ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX);
@@ -96,15 +92,12 @@ mainDiv.addEventListener('mousemove', (e) => {
                 mainImg.style.top = objCoordImg.y - ((e.pageX - objCurrent.xStart - objCoordImg.x) * objCoordImg.coefficientX) + 'px';
             }
         }
-
         if (objCurrent.currentAction === 'edit_img_id') {
             mainImg.style.top = e.pageY - objCurrent.yStart + 'px';
             mainImg.style.left = e.pageX - objCurrent.xStart + 'px';
         }
-
         draw();
     }
-
 })
 
 mainDiv.addEventListener('mouseup', (e) => {
@@ -153,7 +146,6 @@ editImg.addEventListener('mousedown', (e) => {
         objCurrent.xStart = e.offsetX;
         objCurrent.yStart = e.offsetY;
     }
-
     if (e.target.id === 'top_left') {
         trigger = true;
         objCurrent.yStart = 0;
