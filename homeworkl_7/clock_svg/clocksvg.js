@@ -6,11 +6,10 @@ divSvg.insertAdjacentHTML("afterbegin", drawCircles());
 document.body.appendChild(divSvg);
 const svgID = document.getElementById('svg_id');
 
-function drawCircles(){
+function drawCircles() {
     const headSVG = `<svg version="1.1"
     width="${heightDiv}" height="${heightDiv}"
     xmlns="http://www.w3.org/2000/svg" id="svg_id">
-    
     </svg>`
 
     return headSVG;
@@ -36,21 +35,18 @@ function renderNumbers() {
     return strHtml;
 }
 
-function arrows(hour, min, sec, ml){
-    const radiusH = heightDiv * 0.4;
-    const radiusM = heightDiv * 0.6;
-    const radiusS = heightDiv * 0.9;
+function arrows(hour, min, sec, ml) {
+    const radiusH = 0.6;
+    const radiusM = 0.8;
+    const radiusS = 0.9;
     const strokeHour = 10;
     const strokeMin = 6;
     const strokeSec = 4;
-    const lineHour = `<line x1="${heightDiv / 2 - strokeHour / 2}" y1="${heightDiv / 2 - strokeHour / 2}" x2="${Math.round(heightDiv / 2 * Math.sin(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" y2="${Math.round(-heightDiv / 2 * Math.cos(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeHour}" />\n`;
-    const lineMinute = `<line x1="${heightDiv / 2 - strokeMin / 2}" y1="${heightDiv / 2 - strokeMin / 2}" x2="${Math.round(heightDiv / 2 * Math.sin(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" y2="${Math.round(-heightDiv / 2 * Math.cos(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeMin}" />\n`;
-    const lineSecond = `<line x1="${heightDiv / 2 - strokeSec / 2}" y1="${heightDiv / 2 - strokeSec / 2}" x2="${Math.round(heightDiv / 2 * Math.sin(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" y2="${Math.round(-heightDiv / 2 * Math.cos(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" stroke="black" stroke-width="${strokeSec}" />\n`;
-    console.log(Math.round(radiusH * Math.sin(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2)
+    const lineHour = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${radiusH * Math.round(heightDiv / 2 * Math.sin(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" y2="${radiusH * Math.round(-heightDiv / 2 * Math.cos(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeHour}" stroke-linecap="round" />\n`;
+    const lineMinute = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${radiusM * Math.round(heightDiv / 2 * Math.sin(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" y2="${radiusM * Math.round(-heightDiv / 2 * Math.cos(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeMin}" stroke-linecap="round" />\n`;
+    const lineSecond = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${Math.round(heightDiv / 2 * Math.sin(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" y2="${Math.round(-heightDiv / 2 * Math.cos(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" stroke="black" stroke-width="${strokeSec}" stroke-linecap="round" />\n`;
     return lineHour + lineMinute + lineSecond;
 }
-
-console.log(Math.sin(4.71))
 
 function formatTime() {
     let strTime = '';
@@ -73,12 +69,8 @@ function formatTime() {
     return [strTime, timeNow.getHours() < 13 ? timeNow.getHours() : timeNow.getHours() - 12, timeNow.getMinutes(), timeNow.getSeconds(), timeNow.getMilliseconds()];
 }
 
-function clearRect(){
-
-}
-
-function timer(){
-    setInterval(()=>{
+function timer() {
+    setInterval(() => {
         const [strTime, hour, minute, sec, ml] = formatTime();
         svgID.innerHTML = `<circle cx="${heightDiv / 2}" cy="${heightDiv / 2}" r="${heightDiv / 2}" fill="yellow" />
         <text x="${heightDiv / 3}" y="${heightDiv / 3}" font-size="${heightDiv * 0.1}" fill="black">${strTime}</text>
