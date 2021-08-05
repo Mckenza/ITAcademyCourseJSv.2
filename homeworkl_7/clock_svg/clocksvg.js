@@ -44,7 +44,7 @@ function arrows(hour, min, sec, ml) {
     const strokeSec = 4;
     const lineHour = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${radiusH * Math.round(heightDiv / 2 * Math.sin(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" y2="${radiusH * Math.round(-heightDiv / 2 * Math.cos(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeHour}" stroke-linecap="round" />\n`;
     const lineMinute = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${radiusM * Math.round(heightDiv / 2 * Math.sin(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" y2="${radiusM * Math.round(-heightDiv / 2 * Math.cos(((min * 6 + sec * 0.1)) * Math.PI / 180)) + heightDiv / 2}" stroke="black" stroke-width="${strokeMin}" stroke-linecap="round" />\n`;
-    const lineSecond = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${Math.round(heightDiv / 2 * Math.sin(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" y2="${Math.round(-heightDiv / 2 * Math.cos(((sec * 1000 + ml) * 0.006) * Math.PI / 180) + heightDiv / 2)}" stroke="black" stroke-width="${strokeSec}" stroke-linecap="round" />\n`;
+    const lineSecond = `<line x1="${heightDiv / 2}" y1="${heightDiv / 2}" x2="${Math.round(heightDiv / 2 * Math.sin((sec * 6) * Math.PI / 180) + heightDiv / 2)}" y2="${Math.round(-heightDiv / 2 * Math.cos((sec * 6) * Math.PI / 180) + heightDiv / 2)}" stroke="black" stroke-width="${strokeSec}" stroke-linecap="round" />\n`;
     return lineHour + lineMinute + lineSecond;
 }
 
@@ -70,13 +70,18 @@ function formatTime() {
 }
 
 function timer() {
+    const [strTime, hour, minute, sec, ml] = formatTime();
+        svgID.innerHTML = `<circle cx="${heightDiv / 2}" cy="${heightDiv / 2}" r="${heightDiv / 2}" fill="yellow" />
+        <text x="${heightDiv / 3}" y="${heightDiv / 3}" font-size="${heightDiv * 0.1}" fill="black">${strTime}</text>
+        ${renderNumbers()}
+        ${arrows(hour, minute, sec, ml)}`
     setInterval(() => {
         const [strTime, hour, minute, sec, ml] = formatTime();
         svgID.innerHTML = `<circle cx="${heightDiv / 2}" cy="${heightDiv / 2}" r="${heightDiv / 2}" fill="yellow" />
         <text x="${heightDiv / 3}" y="${heightDiv / 3}" font-size="${heightDiv * 0.1}" fill="black">${strTime}</text>
         ${renderNumbers()}
         ${arrows(hour, minute, sec, ml)}`
-    }, 10);
+    }, 1000);
 }
 
 timer();

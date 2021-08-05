@@ -89,8 +89,8 @@ function timer(elements) {
         clock.textContent = str;
         hourElem.setAttribute('style', `transform: rotate(${(hour * 30 + min * 0.5 + sec * 0.008) + 90}deg)`);
         minuteElem.setAttribute('style', `transform: rotate(${(min * 6 + sec * 0.1) + 90}deg)`)
-        secondElem.setAttribute('style', `transform: rotate(${(sec * 1000 + ml) * 0.006 + 90}deg)`);
-    }, 10);
+        secondElem.setAttribute('style', `transform: rotate(${(sec * 6) + 90}deg)`);
+    }, 1000);
 }
 
 function formatTime() {
