@@ -6,7 +6,14 @@ var menu = [
                     name: 'Пункт 1.1', submenu:
                         [
                             { name: 'Пункт 1.1.1', url: 'http://www.tut.by' },
-                            { name: 'Пункт 1.1.2 длинный', url: 'http://www.tut.by' }
+                            { name: 'Пункт 1.1.2 длинный', url: 'http://www.tut.by' },
+                            {
+                                name: 'Пункт 1.1', submenu:
+                                    [
+                                        { name: 'Пункт 1.1.1', url: 'http://www.tut.by' },
+                                        { name: 'Пункт 1.1.2 длинный', url: 'http://www.tut.by' }
+                                    ]
+                            },
                         ]
                 },
                 { name: 'Пункт 1.2', url: 'http://www.tut.by' },
@@ -16,7 +23,14 @@ var menu = [
                             { name: 'Пункт 1.3.1', url: 'http://www.tut.by' },
                             { name: 'Пункт 1.3.2', url: 'http://www.tut.by' },
                             { name: 'Пункт 1.3.3', url: 'http://www.tut.by' },
-                            { name: 'Пункт 1.3.4 длинный', url: 'http://www.tut.by' }
+                            { name: 'Пункт 1.3.4 длинный', url: 'http://www.tut.by' },
+                            {
+                                name: 'Пункт 1.1', submenu:
+                                    [
+                                        { name: 'Пункт 1.1.1', url: 'http://www.tut.by' },
+                                        { name: 'Пункт 1.1.2 длинный', url: 'http://www.tut.by' }
+                                    ]
+                            },
                         ]
                 }
             ]
@@ -32,6 +46,7 @@ var menu = [
 ];
 
 let currentId;
+let bufArray = [];
 
 function createMenu(array) {
     const mainDiv = document.createElement('div');
@@ -67,11 +82,26 @@ addEventListener('mouseover', (e) =>{
         currentId = e.target.getAttribute('id');
         createUnder(menu[currentId]['submenu'], {x: e.pageX, y: e.pageY});
     } else if (e.target.getAttribute('action') === 'true'){
-
+        const id = e.target.id;
+        currentId = id;
+        console.log(id);
+        createUnder(parse(id), {x: e.pageX, y: e.pageY});
     }
-})
+});
+
+function parse(strId){
+    let array = menu;
+    console.log(array);
+    for(let i = 0; i < strId.length; i++){
+        array = array[strId[i]]['submenu'];
+        console.log(array)
+    }
+    
+    return array;
+}
 
 function createUnder(array, dataCoord){
+    const arrayBuff = [];
     const underMenu = document.createElement('div');
     underMenu.classList.add('underMenu');
     underMenu.setAttribute('style', `top: ${dataCoord.y}px; left: ${dataCoord.x}px;`);
@@ -85,6 +115,7 @@ function createUnder(array, dataCoord){
         if('submenu' in value){
             spanDivPoint.textContent = value['name'] + ' ⇒';
             divForEvent.setAttribute('id', currentId + '' + index);
+            console.log(currentId + '' + index);
             divForEvent.setAttribute('action', 'true');
             divPoint.appendChild(divForEvent);
         } else {
