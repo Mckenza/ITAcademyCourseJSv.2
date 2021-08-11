@@ -46,7 +46,10 @@ var menu = [
 ];
 
 let currentId;
+let divTreeId;
 let bufArray = [];
+let treeArray = [];
+let currentObj;
 
 function createMenu(array) {
     const mainDiv = document.createElement('div');
@@ -66,6 +69,7 @@ function createMenu(array) {
             divElementMenu.appendChild(divForEvent);
         } else {
             spanInner.textContent = value['name'];
+            spanInner.setAttribute('id', 'none');
         }
         
         divElementMenu.appendChild(spanInner);
@@ -78,23 +82,105 @@ function createMenu(array) {
 createMenu(menu);
 
 addEventListener('mouseover', (e) =>{
+    currentObj = e.target;
     if(e.target.getAttribute('action') === 'false'){
+        delDOM();
         currentId = e.target.getAttribute('id');
-        createUnder(menu[currentId]['submenu'], {x: e.pageX, y: e.pageY});
+        divTreeId = '0submenu';
+        treeArray.push(divTreeId);
+        if(!document.getElementById(divTreeId)){
+            createUnder(menu[currentId]['submenu'], {x: e.pageX, y: e.pageY});
+        }
     } else if (e.target.getAttribute('action') === 'true'){
         const id = e.target.id;
         currentId = id;
-        console.log(id);
+        let buff = parseInt(divTreeId);
+        divTreeId = ++buff + 'submenu';
+        treeArray.push(divTreeId);
         createUnder(parse(id), {x: e.pageX, y: e.pageY});
+
+    } else if (e.target === document.getElementsByTagName('html')[0]){
+        delDOM();
+    } else if (getParent(e.target) !== 'randomSTR' && getParent(e.target) !== treeArray[treeArray.length - 1]){
+        console.log('sdf')
+        const a = document.getElementById(divTreeId);
+        document.body.removeChild(a);
+        treeArray.pop();
     }
+    console.log(getParent(e.target));
 });
+
+/* парсить ID и дуалаять все выше него */
+
+/*
+else if (treeArray[treeArray.length - 1] !== getParent(e.target)){
+        const a = document.getElementById(divTreeId);
+            document.body.removeChild(a);
+            treeArray.pop();
+    } 
+*/
+
+/*
+else if (e.target.getAttribute('action') === 'none' ){
+        const a = document.getElementById(divTreeId);
+        document.body.removeChild(a);
+        treeArray.pop();
+    }
+*/
+
+/*
+addEventListener('mouseout', (e) =>{
+    if(e.target.getAttribute('action') === 'true'){
+        if(treeArray[treeArray.length - 1] === divTreeId){
+            const a = document.getElementById(divTreeId);
+            document.body.removeChild(a);
+            treeArray.pop();
+        }
+        
+    }
+})
+*/
+
+function getParent(element){
+    //return element.parentElement;
+    if(element.getAttribute('action') === 'none'){
+        return element.parentElement.id;
+    } else if (element.getAttribute('class') === 'element_menu'){
+        return element.parentElement.id;
+    } else if (element.getAttribute('id') === 'none'){
+        return element.parentElement.parentElement.id;
+    } else if (element.getAttribute('class') === 'for_event_div'){
+        return element.parentElement.parentElement.id;
+    } else {
+       return 'randomSTR';
+    }
+    
+}
+
+
+function delDOM(trig = true) {
+    if (trig) {
+        for (let i = 0; i < treeArray.length; i++) {
+            const doc = document.getElementById(treeArray[i]);
+            document.body.removeChild(doc);
+        }
+        treeArray = [];
+    }
+}
+
+function checkDiv(id){
+    for(let i = 0; i < treeArray.length; i++){
+        if(document.getElementById(id)){
+            return false;
+        }
+    }
+    return true;
+}
 
 function parse(strId){
     let array = menu;
-    console.log(array);
     for(let i = 0; i < strId.length; i++){
         array = array[strId[i]]['submenu'];
-        console.log(array)
     }
     
     return array;
@@ -105,6 +191,7 @@ function createUnder(array, dataCoord){
     const underMenu = document.createElement('div');
     underMenu.classList.add('underMenu');
     underMenu.setAttribute('style', `top: ${dataCoord.y}px; left: ${dataCoord.x}px;`);
+    underMenu.setAttribute('id', divTreeId);
 
     array.map((value, index) => {
         const divPoint = document.createElement('div');
@@ -115,11 +202,12 @@ function createUnder(array, dataCoord){
         if('submenu' in value){
             spanDivPoint.textContent = value['name'] + ' ⇒';
             divForEvent.setAttribute('id', currentId + '' + index);
-            console.log(currentId + '' + index);
             divForEvent.setAttribute('action', 'true');
             divPoint.appendChild(divForEvent);
         } else {
             spanDivPoint.textContent = value['name'];
+            spanDivPoint.setAttribute('id', 'none');
+            divPoint.setAttribute('action', 'none');
         }
         
         divPoint.appendChild(spanDivPoint);
