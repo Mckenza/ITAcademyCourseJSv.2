@@ -83,21 +83,24 @@ createMenu(menu);
 
 addEventListener('mouseover', (e) =>{
     currentObj = e.target;
+    console.log(e.target.height);
     if(e.target.getAttribute('action') === 'false'){
         delDOM();
         currentId = e.target.getAttribute('id');
         divTreeId = '0submenu';
         treeArray.push(divTreeId);
         if(!document.getElementById(divTreeId)){
-            createUnder(menu[currentId]['submenu'], {x: e.pageX, y: e.pageY});
+            createUnder(menu[currentId]['submenu'], {x: e.pageX, y: 38});
         }
     } else if (e.target.getAttribute('action') === 'true'){
         const id = e.target.id;
         currentId = id;
+        const elem = document.getElementById(divTreeId);
+        console.log(elem.style.left, window.getComputedStyle(elem)['width']);
         let buff = parseInt(divTreeId);
         divTreeId = ++buff + 'submenu';
         treeArray.push(divTreeId);
-        createUnder(parse(id), {x: e.pageX, y: e.pageY});
+        createUnder(parse(id), {x: parseInt(window.getComputedStyle(elem)['width']) + parseInt(elem.style.left) - 5, y: parseInt(window.getComputedStyle(e.target)['top'])});
 
     } else if (e.target === document.getElementsByTagName('html')[0]){
         delDOM();
@@ -106,6 +109,7 @@ addEventListener('mouseover', (e) =>{
         const a = document.getElementById(divTreeId);
         document.body.removeChild(a);
         treeArray.pop();
+        divTreeId = treeArray[treeArray.length - 1];
     }
     console.log(getParent(e.target));
 });
