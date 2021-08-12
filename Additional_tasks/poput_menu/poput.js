@@ -83,7 +83,6 @@ createMenu(menu);
 
 addEventListener('mouseover', (e) =>{
     currentObj = e.target;
-    console.log(e.target.height);
     if(e.target.getAttribute('action') === 'false'){
         delDOM();
         currentId = e.target.getAttribute('id');
@@ -92,75 +91,65 @@ addEventListener('mouseover', (e) =>{
         if(!document.getElementById(divTreeId)){
             createUnder(menu[currentId]['submenu'], {x: e.pageX, y: 38});
         }
-    } else if (e.target.getAttribute('action') === 'true'){
+    } 
+    if (e.target.getAttribute('action') === 'true'){
         const id = e.target.id;
         currentId = id;
+        if (getParent(e.target) !== 'randomSTR'){
+            del(getParent(e.target));
+            console.log(getParent(e.target))
+        }
         const elem = document.getElementById(divTreeId);
-        console.log(elem.style.left, window.getComputedStyle(elem)['width']);
         let buff = parseInt(divTreeId);
         divTreeId = ++buff + 'submenu';
         treeArray.push(divTreeId);
-        createUnder(parse(id), {x: parseInt(window.getComputedStyle(elem)['width']) + parseInt(elem.style.left) - 5, y: parseInt(window.getComputedStyle(e.target)['top'])});
-
-    } else if (e.target === document.getElementsByTagName('html')[0]){
-        delDOM();
-    } else if (getParent(e.target) !== 'randomSTR' && getParent(e.target) !== treeArray[treeArray.length - 1]){
-        console.log('sdf')
-        const a = document.getElementById(divTreeId);
-        document.body.removeChild(a);
-        treeArray.pop();
-        divTreeId = treeArray[treeArray.length - 1];
-    }
-    console.log(getParent(e.target));
-});
-
-/* парсить ID и дуалаять все выше него */
-
-/*
-else if (treeArray[treeArray.length - 1] !== getParent(e.target)){
-        const a = document.getElementById(divTreeId);
-            document.body.removeChild(a);
-            treeArray.pop();
+        createUnder(parse(id), {x: parseInt(window.getComputedStyle(elem)['width']) + parseInt(elem.style.left) - 2, y: e.pageY - e.offsetY});
     } 
-*/
-
-/*
-else if (e.target.getAttribute('action') === 'none' ){
-        const a = document.getElementById(divTreeId);
-        document.body.removeChild(a);
-        treeArray.pop();
+    if (e.target === document.getElementsByTagName('html')[0]){
+        delDOM();
     }
-*/
-
-/*
-addEventListener('mouseout', (e) =>{
-    if(e.target.getAttribute('action') === 'true'){
-        if(treeArray[treeArray.length - 1] === divTreeId){
-            const a = document.getElementById(divTreeId);
+    if(e.target.getAttribute('action') === 'none'){
+        console.log('sdfsdf')
+        if(getParent(e.target) !== treeArray[treeArray.length - 1]){
+            const a = document.getElementById(treeArray.pop());
             document.body.removeChild(a);
-            treeArray.pop();
         }
-        
-    }
-})
-*/
-
-function getParent(element){
-    //return element.parentElement;
-    if(element.getAttribute('action') === 'none'){
-        return element.parentElement.id;
-    } else if (element.getAttribute('class') === 'element_menu'){
-        return element.parentElement.id;
-    } else if (element.getAttribute('id') === 'none'){
-        return element.parentElement.parentElement.id;
-    } else if (element.getAttribute('class') === 'for_event_div'){
-        return element.parentElement.parentElement.id;
-    } else {
-       return 'randomSTR';
     }
     
+});
+
+function del(id){
+    let index;
+    for(let i = 0; i < treeArray.length; i++){
+        if(id === treeArray[i]){
+            index = i;
+            break;
+        }
+    }
+    for(let i = treeArray.length - 1; i > index; i--){
+        const a = document.getElementById(treeArray[i]);
+        document.body.removeChild(a);
+        treeArray.pop();
+    }
+    divTreeId = treeArray[treeArray.length - 1];
 }
 
+function getParent(element){
+    console.log(element);
+    if (element.getAttribute('class') === 'for_event_div'){
+        return element.parentElement.parentElement.id;
+    }
+    if(element.getAttribute('action') === 'none'){
+        return element.parentElement.id;
+    } 
+    if (element.getAttribute('class') === 'element_menu'){
+        return element.parentElement.id;
+    }
+    if (element.getAttribute('id') === 'none'){
+        return element.parentElement.parentElement.id;
+    } 
+    return 'randomSTR'; 
+}
 
 function delDOM(trig = true) {
     if (trig) {
@@ -186,12 +175,10 @@ function parse(strId){
     for(let i = 0; i < strId.length; i++){
         array = array[strId[i]]['submenu'];
     }
-    
     return array;
 }
 
 function createUnder(array, dataCoord){
-    const arrayBuff = [];
     const underMenu = document.createElement('div');
     underMenu.classList.add('underMenu');
     underMenu.setAttribute('style', `top: ${dataCoord.y}px; left: ${dataCoord.x}px;`);
@@ -217,7 +204,6 @@ function createUnder(array, dataCoord){
         divPoint.appendChild(spanDivPoint);
         underMenu.appendChild(divPoint);
     })
-
 
     document.body.appendChild(underMenu);
 }
