@@ -7,6 +7,31 @@ const TOP_RACQUET = 50;
 let moveLeft;
 let moveRight;
 let animation;
+let countLeft = 0;
+let countRigth = 0;
+let timer;
+let timerTrigger = false;
+let objBall;
+let objRacquet;
+
+const divStart = document.createElement('div');
+divStart.classList.add('divNumber');
+
+const divButtonStart = document.createElement('input');
+divButtonStart.setAttribute('id', 'start_button_id');
+divButtonStart.setAttribute('type', 'button');
+divButtonStart.setAttribute('value', 'Старт!');
+divButtonStart.style.position = 'absolute';
+divButtonStart.style.top = 10 + 'px';
+divButtonStart.style.left = 10 + 'px';
+divStart.appendChild(divButtonStart);
+
+const divCount = document.createElement('div');
+divCount.style.fontSize = '40px';
+divCount.textContent = '0:0';
+divStart.appendChild(divCount);
+
+document.body.appendChild(divStart)
 
 const field = document.createElement('div');
 field.style.height = HEIGHT_FIELD + 'px';
@@ -45,8 +70,8 @@ ball.style.borderRadius = '50%';
 ball.style.backgroundColor = 'red';
 ball.style.border = 'none';
 ball.style.position = 'absolute';
-ball.style.top = HEIGHT_FIELD / 2 - RADIUS_BALL + 'px';
-ball.style.left = WIDTH_FIELD / 2 - RADIUS_BALL + 'px';
+ball.style.top = HEIGHT_FIELD / 2 + 'px';
+ball.style.left = WIDTH_FIELD / 2 + 'px';
 
 field.appendChild(ball);
 
@@ -74,21 +99,27 @@ addEventListener('keyup', (e) =>{
     }
 })
 
-const objRacquet = {
-    yFirst: TOP_RACQUET,
-    ySecond: TOP_RACQUET,
-    dyF: 1,
-    dyS: 1,
-}
+divButtonStart.onclick = () =>{
+    if(timerTrigger){
+        return;
+    }
+    timerTrigger = true;
+    timer = setInterval(moveBall, 10);
 
-const objBall = {
-    x: WIDTH_FIELD / 2,
-    y: HEIGHT_FIELD / 2,
-    dx: -1,
-    dy: 1,
-}
+    objBall = {
+        x: WIDTH_FIELD / 2,
+        y: HEIGHT_FIELD / 2,
+        dx: randomAngle()[0],
+        dy: randomAngle()[1],
+    }
 
-moveBall();
+    objRacquet = {
+        yFirst: TOP_RACQUET,
+        ySecond: TOP_RACQUET,
+        dyF: 1,
+        dyS: 1,
+    }
+}
 
 function moveBall(){
     objBall.x += objBall.dx;
@@ -108,37 +139,62 @@ function moveBall(){
     }
 
     if(objBall.x - 2 <= WIDTH_RACQUET && (objRacquet.yFirst <= objBall.y && objRacquet.yFirst + HEIGHT_RACQUET >= objBall.y)){
-        objBall.dx = 1;
+        objBall.dx = objBall.dx * -1;
     }
 
     if(WIDTH_FIELD - objBall.x - RADIUS_BALL * 2 - WIDTH_RACQUET <= 0 && (objRacquet.ySecond <= HEIGHT_FIELD - objBall.y && objRacquet.ySecond + HEIGHT_RACQUET >= HEIGHT_FIELD - objBall.y)){
-        objBall.dx = -1;
+        objBall.dx = objBall.dx * -1;
     }
 
     if(objBall.x <= -1){
-        cancelAnimationFrame(animation);
-        console.log('game over');
+        clearInterval(timer);
+        timer = -1;
+        timerTrigger = false;
+        countRigth++;
+        divCount.textContent = `${countLeft}:${countRigth}`;
         return;
     }
+
     if(objBall.y <= -1){
-        objBall.dy = 1;
+        objBall.dy = objBall.dy * -1;
     }
+
     if(objBall.x + RADIUS_BALL * 2 >= WIDTH_FIELD + 1){
-        cancelAnimationFrame(animation);
-        console.log('game over');
+        clearInterval(timer);
+        timer = -1;
+        timerTrigger = false;
+        countLeft++;
+        divCount.textContent = `${countLeft}:${countRigth}`;
         return;
     }
+
     if(objBall.y + RADIUS_BALL * 2 > HEIGHT_FIELD + 1){
-        objBall.dy = -1;
+        objBall.dy = objBall.dy * -1;
     }
 
     ball.style.top = objBall.y + 'px';
     ball.style.left = objBall.x + 'px';
-    console.log(ball.style.left);
     first_racquet.style.top = objRacquet.yFirst + 'px';
     second_racquet.style.bottom = objRacquet.ySecond + 'px';
-
-    animation = requestAnimationFrame(moveBall);
 }
 
+function randomAngle(){
+    const random = Math.floor(Math.random() * (136 - 45) + 45);
+    const randomM = Math.random();
+    let xM = 1;
+    let yM = 1;
 
+    if(randomM < 0.2){
+        xM = -1;
+    }
+
+    if(randomM > 0.2 && randomM < 0.4){
+        yM = -1;
+    }
+
+    if(randomM > 0.4 && randomM < 0.6){
+        xM = -1;
+        yM = -1;
+    }
+    return [Math.sin((random) * Math.PI / 180) * xM, Math.cos((random) * Math.PI / 180) * yM]
+}
