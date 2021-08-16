@@ -158,8 +158,8 @@ function drawSVG(){
     width="${WIDTH_FIELD}" height="${HEIGHT_FIELD}"
     xmlns="http://www.w3.org/2000/svg" id="svg_id">
 
-    <rect x="${0}" y="${objRacquet.yFirst}" width="${WIDTH_RACQUET}" height="${HEIGHT_RACQUET}" />\n
-    <rect x="${WIDTH_FIELD - WIDTH_RACQUET}" y="${objRacquet.ySecond}" width="${WIDTH_RACQUET}" height="${HEIGHT_RACQUET}" />\n
+    <rect x="${0}" y="${objRacquet.yFirst}" width="${WIDTH_RACQUET}" height="${HEIGHT_RACQUET}" fill="green"/>\n
+    <rect x="${WIDTH_FIELD - WIDTH_RACQUET}" y="${objRacquet.ySecond}" width="${WIDTH_RACQUET}" height="${HEIGHT_RACQUET}" fill="#6f00cc"/>\n
     <circle cx="${objBall.x}" cy="${objBall.y}" r="${RADIUS_BALL}" fill="red" />\n
     </svg>`
     field.innerHTML = '';
