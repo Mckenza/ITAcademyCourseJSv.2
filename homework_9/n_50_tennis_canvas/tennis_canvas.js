@@ -6,22 +6,20 @@ const RADIUS_BALL = 20;
 const TOP_RACQUET = 50;
 let moveLeft;
 let moveRight;
-let animation;
 let countLeft = 0;
 let countRigth = 0;
-let timer;
-let timerTrigger = false;
+let trigger = false;
 let objBall = {
     x: WIDTH_FIELD / 2,
     y: HEIGHT_FIELD / 2,
-    dx: randomAngle()[0],
-    dy: randomAngle()[1],
+    dx: 0,
+    dy: 0,
 }
 let objRacquet = {
     yFirst: TOP_RACQUET,
     ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
-    dyF: 1,
-    dyS: 1,
+    dyF: 0,
+    dyS: 0,
 }
 
 const divStart = document.createElement('div');
@@ -76,28 +74,28 @@ addEventListener('keyup', (e) =>{
     }
 })
 
-drawCanvas();
+setInterval(moveBall, 5);
 
 divButtonStart.onclick = () =>{
-    if(timerTrigger){
-        return;
-    }
-    timerTrigger = true;
-    timer = setInterval(moveBall, 10);
 
-    objBall = {
-        x: WIDTH_FIELD / 2,
-        y: HEIGHT_FIELD / 2,
-        dx: randomAngle()[0],
-        dy: randomAngle()[1],
+    if(!trigger){
+        objBall = {
+            x: WIDTH_FIELD / 2,
+            y: HEIGHT_FIELD / 2,
+            dx: randomAngle()[0],
+            dy: randomAngle()[1],
+        }
+    
+        objRacquet = {
+            yFirst: TOP_RACQUET,
+            ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
+            dyF: 1,
+            dyS: 1,
+        }
     }
 
-    objRacquet = {
-        yFirst: TOP_RACQUET,
-        ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
-        dyF: 1,
-        dyS: 1,
-    }
+    trigger = true;
+    
 }
 
 function moveBall(){
@@ -126,11 +124,15 @@ function moveBall(){
     }
 
     if(objBall.x - RADIUS_BALL <= 0){
-        clearInterval(timer);
-        timer = -1;
-        timerTrigger = false;
-        countRigth++;
-        divCount.textContent = `${countLeft}:${countRigth}`;
+        objBall.dx = 0;
+        objBall.dy = 0;
+        objRacquet.dyF = 0;
+        objRacquet.dyS = 0;
+        if (trigger) {
+            countRigth++;
+            divCount.textContent = `${countLeft}:${countRigth}`;
+            trigger = false;
+        }
         return;
     }
 
@@ -139,11 +141,15 @@ function moveBall(){
     }
 
     if(objBall.x + RADIUS_BALL >= WIDTH_FIELD){
-        clearInterval(timer);
-        timer = -1;
-        timerTrigger = false;
-        countLeft++;
-        divCount.textContent = `${countLeft}:${countRigth}`;
+        objBall.dx = 0;
+        objBall.dy = 0;
+        objRacquet.dyF = 0;
+        objRacquet.dyS = 0;
+        if (trigger) {
+            countLeft++;
+            divCount.textContent = `${countLeft}:${countRigth}`;
+            trigger = false;
+        }
         return;
     }
 

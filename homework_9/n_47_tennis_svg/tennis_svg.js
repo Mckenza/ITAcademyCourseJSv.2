@@ -6,22 +6,20 @@ const RADIUS_BALL = 20;
 const TOP_RACQUET = 50;
 let moveLeft;
 let moveRight;
-let animation;
 let countLeft = 0;
 let countRigth = 0;
-let timer;
-let timerTrigger = false;
+let trigger = false;
 let objBall = {
     x: WIDTH_FIELD / 2,
     y: HEIGHT_FIELD / 2,
-    dx: randomAngle()[0],
-    dy: randomAngle()[1],
+    dx: 0,
+    dy: 0,
 }
 let objRacquet = {
     yFirst: TOP_RACQUET,
     ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
-    dyF: 1,
-    dyS: 1,
+    dyF: 0,
+    dyS: 0,
 }
 
 const divStart = document.createElement('div');
@@ -51,101 +49,108 @@ field.style.backgroundColor = 'yellow';
 document.body.appendChild(field);
 
 addEventListener('keydown', (e) => {
-    if(e.code === 'ShiftLeft'){
+    if (e.code === 'ShiftLeft') {
         moveLeft = 'upLeft';
     }
-    if(e.code === 'ControlLeft'){
+    if (e.code === 'ControlLeft') {
         moveLeft = 'downLeft';
     }
-    if(e.code === 'ArrowUp'){
+    if (e.code === 'ArrowUp') {
         moveRight = 'upRight';
     }
-    if(e.code === 'ArrowDown'){
+    if (e.code === 'ArrowDown') {
         moveRight = 'downRight';
     }
 })
 
-addEventListener('keyup', (e) =>{
-    if(e.code === 'ShiftLeft' || e.code === 'ControlLeft'){
+addEventListener('keyup', (e) => {
+    if (e.code === 'ShiftLeft' || e.code === 'ControlLeft') {
         moveLeft = 'none';
     }
-    if(e.code === 'ArrowUp' || e.code === 'ArrowDown'){
+    if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
         moveRight = 'none';
     }
 })
 
-drawSVG();
+setInterval(moveBall, 5);
 
-divButtonStart.onclick = () =>{
-    if(timerTrigger){
-        return;
-    }
-    timerTrigger = true;
-    timer = setInterval(moveBall, 10);
+divButtonStart.onclick = () => {
 
-    objBall = {
-        x: WIDTH_FIELD / 2,
-        y: HEIGHT_FIELD / 2,
-        dx: randomAngle()[0],
-        dy: randomAngle()[1],
+    if (!trigger) {
+        objBall = {
+            x: WIDTH_FIELD / 2,
+            y: HEIGHT_FIELD / 2,
+            dx: randomAngle()[0],
+            dy: randomAngle()[1],
+        }
+
+        objRacquet = {
+            yFirst: TOP_RACQUET,
+            ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
+            dyF: 1,
+            dyS: 1,
+        }
     }
 
-    objRacquet = {
-        yFirst: TOP_RACQUET,
-        ySecond: HEIGHT_FIELD - HEIGHT_RACQUET - TOP_RACQUET,
-        dyF: 1,
-        dyS: 1,
-    }
+    trigger = true;
 }
 
-function moveBall(){
+function moveBall() {
     objBall.x += objBall.dx;
     objBall.y += objBall.dy;
 
-    if(moveLeft === 'upLeft' && objRacquet.yFirst > 0){
+    if (moveLeft === 'upLeft' && objRacquet.yFirst > 0) {
         objRacquet.yFirst -= objRacquet.dyF;
     }
-    if(moveLeft === 'downLeft' && objRacquet.yFirst < HEIGHT_FIELD - HEIGHT_RACQUET){
+    if (moveLeft === 'downLeft' && objRacquet.yFirst < HEIGHT_FIELD - HEIGHT_RACQUET) {
         objRacquet.yFirst += objRacquet.dyF;
     }
-    if(moveRight === 'upRight' && objRacquet.ySecond > 0){
+    if (moveRight === 'upRight' && objRacquet.ySecond > 0) {
         objRacquet.ySecond -= objRacquet.dyS;
     }
-    if(moveRight === 'downRight' && objRacquet.ySecond < HEIGHT_FIELD - HEIGHT_RACQUET){
+    if (moveRight === 'downRight' && objRacquet.ySecond < HEIGHT_FIELD - HEIGHT_RACQUET) {
         objRacquet.ySecond += objRacquet.dyS;
     }
 
-    if(objBall.x - RADIUS_BALL + 1 <= WIDTH_RACQUET && (objRacquet.yFirst <= objBall.y && objRacquet.yFirst + HEIGHT_RACQUET >= objBall.y)){
+    if (objBall.x - RADIUS_BALL + 1 <= WIDTH_RACQUET && (objRacquet.yFirst <= objBall.y && objRacquet.yFirst + HEIGHT_RACQUET >= objBall.y)) {
         objBall.dx = objBall.dx * -1;
     }
 
-    if(WIDTH_FIELD - objBall.x - RADIUS_BALL - WIDTH_RACQUET <= 0 && (objRacquet.ySecond <= objBall.y && objRacquet.ySecond + HEIGHT_RACQUET >= objBall.y)){
+    if (WIDTH_FIELD - objBall.x - RADIUS_BALL - WIDTH_RACQUET <= 0 && (objRacquet.ySecond <= objBall.y && objRacquet.ySecond + HEIGHT_RACQUET >= objBall.y)) {
         objBall.dx = objBall.dx * -1;
     }
 
-    if(objBall.x - RADIUS_BALL <= 0){
-        clearInterval(timer);
-        timer = -1;
-        timerTrigger = false;
-        countRigth++;
-        divCount.textContent = `${countLeft}:${countRigth}`;
+    if (objBall.x - RADIUS_BALL <= 0) {
+        objBall.dx = 0;
+        objBall.dy = 0;
+        objRacquet.dyF = 0;
+        objRacquet.dyS = 0;
+        if (trigger) {
+            countRigth++;
+            divCount.textContent = `${countLeft}:${countRigth}`;
+            trigger = false;
+        }
         return;
     }
 
-    if(objBall.y - RADIUS_BALL <= 0){
+    if (objBall.y - RADIUS_BALL <= 0) {
         objBall.dy = objBall.dy * -1;
     }
 
-    if(objBall.x + RADIUS_BALL >= WIDTH_FIELD){
-        clearInterval(timer);
-        timer = -1;
-        timerTrigger = false;
-        countLeft++;
-        divCount.textContent = `${countLeft}:${countRigth}`;
+    if (objBall.x + RADIUS_BALL >= WIDTH_FIELD) {
+        objBall.dx = 0;
+        objBall.dy = 0;
+        objRacquet.dyF = 0;
+        objRacquet.dyS = 0;
+        if (trigger) {
+            countLeft++;
+            divCount.textContent = `${countLeft}:${countRigth}`;
+            trigger = false;
+        }
         return;
     }
 
-    if(objBall.y + RADIUS_BALL > HEIGHT_FIELD + 1){
+    if (objBall.y + RADIUS_BALL > HEIGHT_FIELD + 1) {
         objBall.dy = objBall.dy * -1;
     }
 
@@ -153,7 +158,7 @@ function moveBall(){
 
 }
 
-function drawSVG(){
+function drawSVG() {
     const headSVG = `<svg version="1.1"
     width="${WIDTH_FIELD}" height="${HEIGHT_FIELD}"
     xmlns="http://www.w3.org/2000/svg" id="svg_id">
@@ -166,21 +171,21 @@ function drawSVG(){
     field.innerHTML = headSVG;
 }
 
-function randomAngle(){
+function randomAngle() {
     const random = Math.floor(Math.random() * (136 - 45) + 45);
     const randomM = Math.random();
     let xM = 1;
     let yM = 1;
 
-    if(randomM < 0.2){
+    if (randomM < 0.2) {
         xM = -1;
     }
 
-    if(randomM > 0.2 && randomM < 0.4){
+    if (randomM > 0.2 && randomM < 0.4) {
         yM = -1;
     }
 
-    if(randomM > 0.4 && randomM < 0.6){
+    if (randomM > 0.4 && randomM < 0.6) {
         xM = -1;
         yM = -1;
     }
