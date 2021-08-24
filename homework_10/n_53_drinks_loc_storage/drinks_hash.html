@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div class="input_information">
+            <div class="wrap_input">
+                <input type="text" id="input_name_id" placeholder="Название напитка">
+                <input type="text" id="input_recipe_id" placeholder="Рецепт напитка">
+                <div class="checkbox_alco_wrap">
+                    <input type='checkbox' id="check_alcohol_id"> Алкогольный?
+                </div>
+                <input type="button" value="Добавить" id="add_button">
+            </div>
+        </div>
+        <div class="get_information">
+            <input type="text" id="get_info_id" placeholder="Название напитка">
+            <div class="manage_buttons">
+                <input type="button" value="Получить" id="get_button">
+                <input type="button" value="Удалить" id="del_button">
+            </div>
+            <input type="button" value="Весь список напитков" id="all_list_button">
+        </div>
+        <div class="fullInfo" id="fullInfo_id"></div>
+    </main>
+    <br>
+    <main>
+        <div class="input_information">
+            <div class="wrap_input">
+                <input type="text" id="input_name_id_dish" placeholder="Название блюда">
+                <input type="text" id="input_recipe_id_dish" placeholder="Рецепт блюда">
+                <input type="button" value="Добавить" id="add_button_dish">
+            </div>
+        </div>
+        <div class="get_information">
+            <input type="text" id="get_info_id_dish" placeholder="Название блюда">
+            <div class="manage_buttons">
+                <input type="button" value="Получить" id="get_button_dish">
+                <input type="button" value="Удалить" id="del_button_dish">
+            </div>
+            <input type="button" value="Весь список рецептов" id="all_list_button_dish">
+        </div>
+        <div class="fullInfo" id="fullInfo_id_dish"></div>
+    </main>
+
+    <script src="locStorage.js"></script>
+</body>
+
+</html>
