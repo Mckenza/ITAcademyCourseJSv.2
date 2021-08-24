@@ -1,7 +1,7 @@
 class ViewCanvas {
-    constructor(widthCanvas) {
-        this.widthCanvas = widthCanvas;
-        this.canvas = document.createElement('canvas');
+    constructor(params) {
+        this.widthCanvas = params.width;
+        this.canvas = params.canvas;
         this.canvas.height = this.widthCanvas;
         this.canvas.width = this.widthCanvas;
         this.radiusSmallArc = Math.floor(this.widthCanvas * 0.07);
@@ -11,9 +11,9 @@ class ViewCanvas {
         this.textCoordY = this.widthCanvas / 2 / 1.5;
     }
 
-    drawCanvas() {
+    draw(time) {
         let currentAngle = 0;
-        const [strTime, hour, min, sec] = formatTime(); /* */
+        const [strTime, hour, min, sec] = time;
 
         const cvs = this.canvas.getContext('2d'); 
         cvs.clearRect(0, 0, this.widthCanvas, this.widthCanvas);    
@@ -27,7 +27,7 @@ class ViewCanvas {
         cvs.font = `bold ${this.radiusSmallArc * 1.2}px serif`; 
 
         for (let i = 0; i < 12; i++) {
-            const angle = getRadian(currentAngle);  
+            const angle = this.getRadian(currentAngle);  
             const x = Math.round(this.radiusDrow * Math.sin(angle) + this.radiusDrow + this.radiusSmallArc + this.border);
             const y = Math.round(this.radiusDrow * Math.cos(angle) + this.radiusDrow + this.radiusSmallArc + this.border);
             
@@ -42,7 +42,7 @@ class ViewCanvas {
 
         cvs.fillStyle = 'black';
         cvs.font = `${this.widthCanvas * 0.1}px serif`;
-        cvs.fillText(strTime, this.textCoordX, this.textCoordY);  /* */
+        cvs.fillText(strTime, this.textCoordX, this.textCoordY);
 
         const radiusH = 0.6;
         const radiusM = 0.8;
@@ -83,3 +83,5 @@ class ViewCanvas {
     }
 
 }
+
+export { ViewCanvas };

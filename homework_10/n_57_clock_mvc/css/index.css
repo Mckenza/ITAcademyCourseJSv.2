@@ -1,0 +1,82 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.environment{
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.wrapDiv{
+    height: 340px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.manage_buttons{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.buttons_view{
+    height: 80%;
+    width: 80px;
+}
+
+.maindiv{
+    margin: 20px;
+    border-radius: 50%;
+    background-color: rgb(242, 242, 40);
+    position: relative;
+}
+
+.numbers{
+    position: absolute;
+    border-radius: 50%;
+    background-color: green;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 36px;
+    color: white;
+}
+
+.clock{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.arrows{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+
+}
+
+.arrows > *{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.arrowsStyle{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%);
+    
+}

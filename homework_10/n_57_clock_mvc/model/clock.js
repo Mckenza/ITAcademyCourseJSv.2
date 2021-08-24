@@ -1,8 +1,18 @@
 
-
 class ModelClock {
-    constructor() {
-        
+    constructor(view) {
+        this.timeNow = this.formatTime();
+        this.view = view;
+        this.runTimer = true;
+        this.updateTime();
+    }
+
+    setRunTimer(value){
+        this.runTimer = value;
+    }
+
+    getRunTimer(){
+        return this.runTimer;
     }
 
     formatTime() {
@@ -25,4 +35,21 @@ class ModelClock {
         }
         return [strTime, timeNow.getHours() < 13 ? timeNow.getHours() : timeNow.getHours() - 12, timeNow.getMinutes(), timeNow.getSeconds()];
     }
+
+    updateTime() {
+        this.view.draw(this.timeNow);
+        setInterval(() => {
+            if(this.runTimer){
+                this.timeNow = this.formatTime();
+                this.view.draw(this.timeNow);
+            }
+        }, 1000)
+    }
+
+    getTime() {
+        return this.timeNow;
+    }
+
 }
+
+export { ModelClock };

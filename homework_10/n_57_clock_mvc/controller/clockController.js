@@ -1,11 +1,24 @@
-
 class Controller{
-    constructor(view, paramsView, model){
-        this.view = new view(paramsView);
-        this.model = new model();
+    constructor(view, model, params){
+        this.view = new view(params);
+        this.model = new model(this.view);
+        this.params = params;
+        this.events();
     }
 
-    events(start, stop){
-        
+    events(){
+        this.params.buttonStop.onclick = () =>{
+            if(this.model.getRunTimer()){
+                this.model.setRunTimer(false);
+            }
+        }
+
+        this.params.buttonStart.onclick = () =>{
+            if(!this.model.getRunTimer()){
+                this.model.setRunTimer(true);
+            }
+        }
     }
 }
+
+export { Controller };
