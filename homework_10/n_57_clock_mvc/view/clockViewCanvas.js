@@ -2,7 +2,7 @@ class ViewCanvas {
     constructor(params) {
         this.time = params.time;
         this.widthCanvas = params.width;
-        this.canvas = params.canvas;
+        this.canvas = document.createElement('canvas');
         this.canvas.height = this.widthCanvas;
         this.canvas.width = this.widthCanvas;
         this.radiusSmallArc = Math.floor(this.widthCanvas * 0.07);
@@ -10,12 +10,12 @@ class ViewCanvas {
         this.radiusDrow = this.widthCanvas / 2 - this.radiusSmallArc - this.border;
         this.textCoordX = this.widthCanvas / 2 / 1.5;
         this.textCoordY = this.widthCanvas / 2 / 1.5;
+        params.div.appendChild(this.canvas);
     }
 
     draw(time) {
         let currentAngle = 0;
         const [strTime, hour, min, sec] = time;
-
         const cvs = this.canvas.getContext('2d'); 
         cvs.clearRect(0, 0, this.widthCanvas, this.widthCanvas);    
         cvs.fillStyle = 'yellow';   
