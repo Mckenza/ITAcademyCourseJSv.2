@@ -9,12 +9,12 @@ class Init{
         this.height = 340;
         this.width = 300;
         this.mainDiv = this.createEnvironment();
-        this.createCanvas();
-        this.createSVG()
-        this.createCanvas();
-        this.createSVG();
-        this.createDOM();
-        this.createDOM();
+        this.createCanvas({str: 'Нью-Йорк (GTM - 4)', time: -7});
+        this.createSVG({str: 'Лондон (GTM + 1)', time: -2})
+        this.createDOM({str: 'Берлин (GTM + 2)', time: -1});
+        this.createCanvas({str: 'Минск (GTM + 3)', time: 0});
+        this.createSVG({str: 'Токио (GTM + 9)', time: 6});
+        this.createDOM({str: 'Владивосток (GTM + 10)', time: 7});
     }
 
     createEnvironment(){
@@ -24,7 +24,7 @@ class Init{
         return env;
     }
 
-    createCanvas(){
+    createCanvas(data){
         const divWrap = document.createElement('div');
         divWrap.setAttribute('class', 'wrapDiv');
 
@@ -38,6 +38,8 @@ class Init{
         buttonStop.setAttribute('type', 'button');
         buttonStop.setAttribute('class', 'buttons_view');
         buttonStop.setAttribute('value', 'Stop');
+        const clockCity = document.createElement('div');
+        clockCity.textContent = data.str;
 
         const canvas = document.createElement('canvas');
         canvas.setAttribute('width', this.width);
@@ -45,6 +47,7 @@ class Init{
 
         divManage.appendChild(buttonStart);
         divManage.appendChild(buttonStop);
+        divManage.appendChild(clockCity);
         divWrap.appendChild(divManage);
         divWrap.appendChild(canvas);
 
@@ -54,12 +57,13 @@ class Init{
             buttonStart: buttonStart,
             canvas: canvas,
             width: this.width,
+            time: data.time,
         }
 
         const canvasObj = new Controller(ViewCanvas, ModelClock, params);
     }
 
-    createSVG(){
+    createSVG(data){
         const divWrap = document.createElement('div');
         divWrap.setAttribute('class', 'wrapDiv');
 
@@ -73,6 +77,8 @@ class Init{
         buttonStop.setAttribute('type', 'button');
         buttonStop.setAttribute('class', 'buttons_view');
         buttonStop.setAttribute('value', 'Stop');
+        const clockCity = document.createElement('div');
+        clockCity.textContent = data.str;
 
         const divField = document.createElement('div');
         divField.setAttribute('style', `width: ${this.width}px; height: ${this.width}px`);
@@ -80,6 +86,7 @@ class Init{
 
         divManage.appendChild(buttonStart);
         divManage.appendChild(buttonStop);
+        divManage.appendChild(clockCity);
         divWrap.appendChild(divManage);
         divWrap.appendChild(divField);
 
@@ -89,12 +96,13 @@ class Init{
             buttonStart: buttonStart,
             div: divField,
             width: this.width,
+            time: data.time,
         }
 
         const svgObj = new Controller(ClockSVG, ModelClock, params);
     }
 
-    createDOM(){
+    createDOM(data){
         const divWrap = document.createElement('div');
         divWrap.setAttribute('class', 'wrapDiv');
 
@@ -108,6 +116,8 @@ class Init{
         buttonStop.setAttribute('type', 'button');
         buttonStop.setAttribute('class', 'buttons_view');
         buttonStop.setAttribute('value', 'Stop');
+        const clockCity = document.createElement('div');
+        clockCity.textContent = data.str;
 
         const divField = document.createElement('div');
         divField.setAttribute('style', `width: ${this.width}px; height: ${this.width}px`);
@@ -115,6 +125,7 @@ class Init{
 
         divManage.appendChild(buttonStart);
         divManage.appendChild(buttonStop);
+        divManage.appendChild(clockCity);
         divWrap.appendChild(divManage);
         divWrap.appendChild(divField);
 
@@ -124,6 +135,7 @@ class Init{
             buttonStart: buttonStart,
             div: divField,
             width: this.width,
+            time: data.time,
         }
 
         const domObj = new Controller(ClockDOM, ModelClock, params);

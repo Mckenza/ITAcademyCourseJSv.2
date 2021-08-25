@@ -1,30 +1,35 @@
 class ClockDOM {
     constructor(param) {
+        this.time = param.time;
         this.linkDOMelem = param.div;
         this.height = param.width;
         this.heightNumbers = this.height * 0.12;
         this.mainDiv = this.createMainDiv();
         this.arrayCoords = this.renderNumbers(this.height, this.heightNumbers);
         this.addNumbers();
+        this.elements = this.renderClock();
     }
 
     draw(time) {
         const [str, hour, min, sec] = time;
+        const [clockLikeNumbers, hourElem, minuteElem, secondElem] = this.elements;
+        clockLikeNumbers.textContent = str;
+        hourElem.setAttribute('style', `transform: rotate(${((hour + this.time) * 30 + min * 0.5 + sec * 0.008) + 90}deg)`);
+        minuteElem.setAttribute('style', `transform: rotate(${(min * 6 + sec * 0.1) + 90}deg)`)
+        secondElem.setAttribute('style', `transform: rotate(${(sec * 6) + 90}deg)`);  
+    }
 
+    renderClock(){
         const clockLikeNumbers = document.createElement('div');
         clockLikeNumbers.setAttribute('style', `position: absolute; top: ${(this.height / 2) / 2}px; left: ${(this.height / 2) / 1.5}px; height: ${this.height * 0.12}px; width: ${this.height * 0.32}px; font-size: ${this.height * 0.1}px;`);
         clockLikeNumbers.classList.add('clock');
-        clockLikeNumbers.textContent = str;
         this.mainDiv.appendChild(clockLikeNumbers);
         
         const clockArrows = document.createElement('div');
         clockArrows.classList.add('arrows');
         const divHour = document.createElement('div');
-        divHour.setAttribute('style', `transform: rotate(${(hour * 30 + min * 0.5 + sec * 0.008) + 90}deg)`);
         const divMinute = document.createElement('div');
-        divMinute.setAttribute('style', `transform: rotate(${(min * 6 + sec * 0.1) + 90}deg)`);
         const divSecond = document.createElement('div');
-        divSecond.setAttribute('style', `transform: rotate(${(sec * 6) + 90}deg)`);
     
         const hourArrow = document.createElement('div');
         hourArrow.setAttribute('style', `height: ${this.height * 0.025}px; width: 60%;`);
@@ -55,8 +60,9 @@ class ClockDOM {
     
         this.mainDiv.appendChild(clockArrows);
         this.linkDOMelem.innerHTML = '';
-
         this.linkDOMelem.appendChild(this.mainDiv);
+
+        return [clockLikeNumbers, divHour, divMinute, divSecond];
     }
 
     renderNumbers(height, heightNumbers) {

@@ -1,9 +1,13 @@
 class Controller{
     constructor(view, model, params){
-        this.view = new view(params);
-        this.model = new model(this.view);
         this.params = params;
+        this.view = new view(params);
+        this.model = new model(this.view, params.time);
         this.events();
+    }
+
+    setTimeZone(){
+        this.model.setTimeZone(this.params.time);
     }
 
     events(){

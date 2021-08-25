@@ -1,5 +1,6 @@
 class ClockSVG {
     constructor(params) {
+        this.time = params.time;
         this.heightDiv = params.width;
         this.mainDiv = params.div;
     }
@@ -29,7 +30,7 @@ class ClockSVG {
         const strokeHour = 10;
         const strokeMin = 6;
         const strokeSec = 4;
-        const lineHour = `<line x1="${this.heightDiv / 2}" y1="${this.heightDiv / 2}" x2="${radiusH * Math.round(this.heightDiv / 2 * Math.sin(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + this.heightDiv / 2}" y2="${radiusH * Math.round(-this.heightDiv / 2 * Math.cos(((hour * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + this.heightDiv / 2}" stroke="black" stroke-width="${strokeHour}" stroke-linecap="round" />\n`;
+        const lineHour = `<line x1="${this.heightDiv / 2}" y1="${this.heightDiv / 2}" x2="${radiusH * Math.round(this.heightDiv / 2 * Math.sin((((hour + this.time) * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + this.heightDiv / 2}" y2="${radiusH * Math.round(-this.heightDiv / 2 * Math.cos((((hour + this.time) * 30 + min * 0.5 + sec * 0.008)) * Math.PI / 180)) + this.heightDiv / 2}" stroke="black" stroke-width="${strokeHour}" stroke-linecap="round" />\n`;
         const lineMinute = `<line x1="${this.heightDiv / 2}" y1="${this.heightDiv / 2}" x2="${radiusM * Math.round(this.heightDiv / 2 * Math.sin(((min * 6 + sec * 0.1)) * Math.PI / 180)) + this.heightDiv / 2}" y2="${radiusM * Math.round(-this.heightDiv / 2 * Math.cos(((min * 6 + sec * 0.1)) * Math.PI / 180)) + this.heightDiv / 2}" stroke="black" stroke-width="${strokeMin}" stroke-linecap="round" />\n`;
         const lineSecond = `<line x1="${this.heightDiv / 2}" y1="${this.heightDiv / 2}" x2="${Math.round(this.heightDiv / 2 * Math.sin((sec * 6) * Math.PI / 180) + this.heightDiv / 2)}" y2="${Math.round(-this.heightDiv / 2 * Math.cos((sec * 6) * Math.PI / 180) + this.heightDiv / 2)}" stroke="black" stroke-width="${strokeSec}" stroke-linecap="round" />\n`;
 

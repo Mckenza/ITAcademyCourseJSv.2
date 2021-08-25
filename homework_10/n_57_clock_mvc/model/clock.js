@@ -1,6 +1,7 @@
 
 class ModelClock {
-    constructor(view) {
+    constructor(view, time) {
+        this.timeZone = time;
         this.timeNow = this.formatTime();
         this.view = view;
         this.runTimer = true;
@@ -15,13 +16,17 @@ class ModelClock {
         return this.runTimer;
     }
 
+    setTimeZone(value){
+        this.timeZone = value
+    }
+
     formatTime() {
         let strTime = '';
         const timeNow = new Date();
-        if (timeNow.getHours() < 10) {
-            strTime += ('0' + timeNow.getHours() + ':');
+        if (timeNow.getHours() + this.timeZone < 10) {
+            strTime += ('0' + (timeNow.getHours() + this.timeZone) + ':');
         } else {
-            strTime += timeNow.getHours() + ':';
+            strTime += (timeNow.getHours() + this.timeZone) + ':';
         }
         if (timeNow.getMinutes() < 10) {
             strTime += ('0' + timeNow.getMinutes() + ':');

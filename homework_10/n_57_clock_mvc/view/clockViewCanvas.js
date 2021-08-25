@@ -1,5 +1,6 @@
 class ViewCanvas {
     constructor(params) {
+        this.time = params.time;
         this.widthCanvas = params.width;
         this.canvas = params.canvas;
         this.canvas.height = this.widthCanvas;
@@ -50,8 +51,8 @@ class ViewCanvas {
         const strokeHour = 10;
         const strokeMin = 6;
         const strokeSec = 4;
-        const xH = radiusH * Math.round(this.widthCanvas / 2 * Math.sin((hour * 30 + min * 0.5 + sec * 0.008) * Math.PI / 180)) + this.widthCanvas / 2;
-        const yH = radiusH * Math.round(-this.widthCanvas / 2 * Math.cos((hour * 30 + min * 0.5 + sec * 0.008) * Math.PI / 180)) + this.widthCanvas / 2;
+        const xH = radiusH * Math.round(this.widthCanvas / 2 * Math.sin(((hour + this.time) * 30 + min * 0.5 + sec * 0.008) * Math.PI / 180)) + this.widthCanvas / 2;
+        const yH = radiusH * Math.round(-this.widthCanvas / 2 * Math.cos(((hour + this.time) * 30 + min * 0.5 + sec * 0.008) * Math.PI / 180)) + this.widthCanvas / 2;
         const xM = radiusM * Math.round(this.widthCanvas / 2 * Math.sin(((min * 6 + sec * 0.1)) * Math.PI / 180)) + this.widthCanvas / 2;
         const yM = radiusM * Math.round(-this.widthCanvas / 2 * Math.cos(((min * 6 + sec * 0.1)) * Math.PI / 180)) + this.widthCanvas / 2;
         const xS = radiusS * Math.round(this.widthCanvas / 2 * Math.sin((sec * 6) * Math.PI / 180)) + this.widthCanvas / 2;
