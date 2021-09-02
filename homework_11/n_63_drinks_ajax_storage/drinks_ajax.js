@@ -1,12 +1,10 @@
 class AJAXStorage {
-
-    constructor(data) {
-        this.data = data;
-        this.self = this;
+    constructor() {
         this.url = 'https://fe.it-academy.by/AjaxStringStorage2.php';
         this.nameAjax = 'buyak_eugene_drinks_ajax';
         this.pass = '123456Zz';
-        this.showInfoDiv = document.getElementById('fullInfo_id');
+        this.data = {};
+        this.readAjax('just');
     }
 
     addValue(key, value) {
@@ -35,23 +33,11 @@ class AJAXStorage {
     }
 
     getKey() {
-        this.readAjax('just', this.getKeyAjax);
+        const arrayKeys = Object.keys(this.data);
+        return arrayKeys;
     }
 
-    getKeyAjax(data){
-        const arrayKeys = Object.keys(data);
-        if (arrayKeys.length === 0) {
-            showInfoDiv.textContent = 'нет элементов списка';
-        } else {
-            let str = '';
-            arrayKeys.forEach((value, index) => {
-                str += `${(index + 1)}. ${value} `;
-            })
-            showInfoDiv.textContent = str;
-        }
-    }
-
-    readAjax(type, callback) {
+    readAjax(type) {
         $.ajax({
             url: this.url,
             type: 'POST',
@@ -66,13 +52,11 @@ class AJAXStorage {
         function resolve(data) {
             console.log('READ - ok');
             console.log(data);
-            if(type === 'just'){
+            if (type === 'just') {
                 this.data = JSON.parse(data.result);
-                callback.call(this, JSON.parse(data.result));
-                console.log(this.data);
                 return;
             }
-            if(data.result === ''){
+            if (data.result === '') {
                 this.insertAjax();
             } else {
                 this.lockgetAjax();
@@ -131,7 +115,7 @@ class AJAXStorage {
         }
     }
 
-    updateAjax(){
+    updateAjax() {
         $.ajax({
             url: this.url,
             type: 'POST',
@@ -162,7 +146,7 @@ const checkAlco = document.getElementById('check_alcohol_id');
 const getInfoInput = document.getElementById('get_info_id');
 const showInfoDiv = document.getElementById('fullInfo_id');
 
-const logic = new AJAXStorage({});
+const logic = new AJAXStorage();
 
 document.getElementById('add_button').onclick = () => {
     if (!inputNameDrink.value) {
@@ -179,7 +163,6 @@ document.getElementById('add_button').onclick = () => {
 document.getElementById('get_button').onclick = () => {
     if (!getInfoInput.value) {
         styleBoard(getInfoInput);
-        alert('сначало загрузите список или добавьте');
     } else {
         const item = logic.getValue(getInfoInput.value);
         if (!item) {
@@ -198,12 +181,20 @@ document.getElementById('del_button').onclick = () => {
     } else {
         logic.deleteValue(getInfoInput.value);
         showInfoDiv.textContent = '';
-        alert('Удалено');
     }
 }
 
 document.getElementById('all_list_button').onclick = () => {
-    logic.getKey();
+    const arrayKeys = logic.getKey();
+    if (arrayKeys.length === 0) {
+        showInfoDiv.textContent = 'нет элементов списка';
+    } else {
+        let str = '';
+        arrayKeys.forEach((value, index) => {
+            str += `${(index + 1)}. ${value} `;
+        })
+        showInfoDiv.textContent = str;
+    }
 }
 
 function styleBoard(element) {
