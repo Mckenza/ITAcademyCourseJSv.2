@@ -10,7 +10,7 @@ class AJAXStorage {
     addValue(key, value) {
         if (typeof key === 'string') {
             this.data[key] = value;
-            this.readAjax();
+            this.lockgetAjax('edit');
         }
     }
 
@@ -25,7 +25,7 @@ class AJAXStorage {
     deleteValue(key) {
         if (key in this.data) {
             delete this.data[key];
-            this.readAjax();
+            this.lockgetAjax('del');
             return true;
         } else {
             return false;
@@ -91,7 +91,7 @@ class AJAXStorage {
         }
     }
 
-    lockgetAjax() {
+    lockgetAjax(type) {
         $.ajax({
             url: this.url,
             type: 'POST',
@@ -107,7 +107,7 @@ class AJAXStorage {
         function resolve(data) {
             console.log('LOCKGET - ok');
             console.log(data);
-            this.updateAjax();
+            this.updateAjax(type);
         }
 
         function reject() {
@@ -115,7 +115,7 @@ class AJAXStorage {
         }
     }
 
-    updateAjax() {
+    updateAjax(type) {
         $.ajax({
             url: this.url,
             type: 'POST',
@@ -129,13 +129,24 @@ class AJAXStorage {
             error: reject,
         });
 
-        function resolve(data) {
+        function resolve() {
             console.log('UPDATE - ok');
-            console.log(data);
+            if(type === 'del'){
+                alert('Удаление успешно');
+            }
+            if(type === 'edit'){
+                alert('Успешно изменен/добавлен');
+            }
         }
 
         function reject() {
             console.log('UPDATE - bad');
+            if(type === 'del'){
+                alert('ошибка при удалении');
+            }
+            if(type === 'edit'){
+                alert('ошибка при добавлении/изменении');
+            }
         }
     }
 }
@@ -146,7 +157,7 @@ const checkAlco = document.getElementById('check_alcohol_id');
 const getInfoInput = document.getElementById('get_info_id');
 const showInfoDiv = document.getElementById('fullInfo_id');
 
-const logic = new AJAXStorage();
+const logic = new AJAXStorage(showInfoDiv);
 
 document.getElementById('add_button').onclick = () => {
     if (!inputNameDrink.value) {
@@ -163,10 +174,12 @@ document.getElementById('add_button').onclick = () => {
 document.getElementById('get_button').onclick = () => {
     if (!getInfoInput.value) {
         styleBoard(getInfoInput);
+        showInfoDiv.textContent = 'Такого элемента нет';
     } else {
         const item = logic.getValue(getInfoInput.value);
         if (!item) {
             styleBoard(getInfoInput);
+            showInfoDiv.textContent = 'Такого элемента нет';
         } else {
             showInfoDiv.textContent = `Название: ${getInfoInput.value}
             Рецепт: ${item.recipe}
@@ -178,9 +191,13 @@ document.getElementById('get_button').onclick = () => {
 document.getElementById('del_button').onclick = () => {
     if (!getInfoInput.value) {
         styleBoard(getInfoInput);
+        showInfoDiv.textContent = 'Удаление: Такого элемента нет';
     } else {
-        logic.deleteValue(getInfoInput.value);
-        showInfoDiv.textContent = '';
+        if(!logic.deleteValue(getInfoInput.value)){
+            showInfoDiv.textContent = 'Удаление: Такого элемента нет';
+        } else {
+            showInfoDiv.textContent = '';
+        }
     }
 }
 
